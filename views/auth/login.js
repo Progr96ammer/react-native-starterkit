@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Alert} from "react-native";
 import {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import {
     NativeBaseProvider,
@@ -24,7 +25,21 @@ export default function App({ navigation }) {
     const [emailError, setEmailError] = useState('');
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    const [token, setToken] = useState('');
+
+    const storeData = async (value) => {
+        try {
+            await AsyncStorage.setItem('token', JSON.stringify(value))
+        } catch (e) {
+            Alert.alert(
+                "Server error",
+                'Sorry we can not complete your procedure right now!',
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            )
+        }
+    }
+
     const login = () => {
         return fetch('http://progr96ammer-noder.herokuapp.com/user/login',{
             method: 'POST',
@@ -62,8 +77,8 @@ export default function App({ navigation }) {
                     )
                 }
                 if(json.url == '/home'){
-                    setToken(json.token)
-                    navigation.navigate('home')
+                    storeData('token',json.token);
+                    navigation.navigate('home');
                 }
             })
             .catch((error) => {
