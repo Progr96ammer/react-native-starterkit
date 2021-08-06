@@ -66,6 +66,7 @@ export default function App({ navigation }) {
                 setUsernameError('')
                 setEmailError('')
                 setPasswordError('')
+                setConfirmPasswordError('')
                 if (json.errors){
                     json.errors.forEach(value=> {
                             if (value.param == 'attempts') {
@@ -77,16 +78,25 @@ export default function App({ navigation }) {
                                     ]
                                 )
                             }
-                            if (value.param == 'credential') {
+                            if (value.param == 'name') {
+                                setNameError(value.msg)
+                            }
+                            if (value.param == 'username') {
+                                setUsernameError(value.msg)
+                            }
+                            if (value.param == 'email') {
                                 setEmailError(value.msg)
                             }
                             if (value.param == 'password') {
                                 setPasswordError(value.msg)
                             }
+                            if (value.param == 'confirmPassword') {
+                                setConfirmPasswordError(value.msg)
+                            }
                         }
                     )
                 }
-                if(json.url == '/home'){
+                if(json.url == 'emailVerifyForm'){
                     storeData('token',json.token);
                     navigation.navigate('home');
                 }
@@ -116,34 +126,49 @@ export default function App({ navigation }) {
                         <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
                             Name
                         </FormControl.Label>
-                        <Input />
+                        <Input onChangeText={(text)=>setName(text)} />
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {nameError}
+                        </FormControl.Label>
                     </FormControl>
                     <FormControl>
                         <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
                             Username
                         </FormControl.Label>
-                        <Input />
+                        <Input onChangeText={(text)=>setUsername(text)}/>
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {usernameError}
+                        </FormControl.Label>
                     </FormControl>
                     <FormControl>
                         <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
                             Email
                         </FormControl.Label>
-                        <Input />
+                        <Input onChangeText={(text)=>setEmail(text)}/>
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {emailError}
+                        </FormControl.Label>
                     </FormControl>
                     <FormControl>
                         <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
                             Password
                         </FormControl.Label>
-                        <Input type="password" />
+                        <Input onChangeText={(text)=>setPassword(text)} type="password" />
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {passwordError}
+                        </FormControl.Label>
                     </FormControl>
                     <FormControl>
                         <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
                             Confirm Password
                         </FormControl.Label>
-                        <Input type="password" />
+                        <Input onChangeText={(text)=>setConfirmPassword(text)} type="password" />
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {confirmPasswordError}
+                        </FormControl.Label>
                     </FormControl>
                     <VStack  space={2}  mt={5}>
-                        <Button colorScheme="cyan" _text={{color: 'white' }}>
+                        <Button onPress={signup} colorScheme="cyan" _text={{color: 'white' }}>
                             SignUp
                         </Button>
                     </VStack>
