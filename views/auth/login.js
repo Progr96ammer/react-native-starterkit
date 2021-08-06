@@ -16,7 +16,7 @@ import {
     Icon,
     IconButton,
     HStack,
-    Divider
+    Divider, Center
 } from 'native-base';
 import {verticalAlign} from "styled-system";
 
@@ -77,7 +77,7 @@ export default function App({ navigation }) {
                     )
                 }
                 if(json.url == '/home'){
-                    storeData('token',json.token);
+                    storeData(json.token);
                     navigation.navigate('home');
                 }
             })
@@ -132,12 +132,16 @@ export default function App({ navigation }) {
                             Login
                         </Button>
                     </VStack>
-                    <HStack justifyContent="center">
-                        <Text fontSize='sm' color='muted.700' fontWeight={400}>I'm a new user. </Text>
-                        <Link onPress={() => navigation.navigate('signup')} _text={{ color: 'cyan.500', bold: true, fontSize: 'sm' }} >
-                            Sign Up
-                        </Link>
-                    </HStack>
+                    <Center>
+                        <HStack>
+                            <Heading color="muted.400" size="xs"> You're a new user.? </Heading>
+                        </HStack>
+                    </Center>
+                    <VStack  space={2}>
+                        <Button onPress={() => navigation.navigate('signup')} colorScheme="cyan" _text={{color: 'white' }}>
+                            Signup
+                        </Button>
+                    </VStack>
                 </VStack>
             </Box>
         </NativeBaseProvider>
