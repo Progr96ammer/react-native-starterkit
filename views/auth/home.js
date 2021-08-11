@@ -19,7 +19,6 @@ export default function home({ navigation }) {
                     })
                         .then((response) => response.json())
                         .then((json) => {
-                            console.log(json)
                             if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
                                 Alert.alert(
                                     "Connection Error",
