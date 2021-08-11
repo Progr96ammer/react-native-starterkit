@@ -76,6 +76,15 @@ export default function App({ navigation }) {
                         }
                     )
                 }
+                if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
+                    Alert.alert(
+                        "Connection Error",
+                        json,
+                        [
+                            { text: "OK", onPress: () => console.log("OK Pressed") }
+                        ]
+                    )
+                }
                 if(json.url == '/home'){
                     storeData(json.token);
                     navigation.navigate('home');

@@ -23,6 +23,8 @@ import {verticalAlign} from "styled-system";
 
 export default function App({ navigation }) {
     const [fresh, setFresh] = useState('');
+    const [verificaionCode, setVerificaionCode] = useState('');
+    const [verificaionCodeError, setVerificaionCodeError] = useState('');
     const sendFresh = async () => {
         const token = await AsyncStorage.getItem('token');
         try {
@@ -36,25 +38,76 @@ export default function App({ navigation }) {
             })
                 .then((response) => response.json())
                 .then((json) => {
+                    if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
+                        Alert.alert(
+                            "Connection Error",
+                            json,
+                            [
+                                { text: "OK", onPress: () => console.log("OK Pressed") }
+                            ]
+                        )
+                    }
+                    console.log(json)
+                    if(json.url == 'emailVerifyForm?sent=true'){
+                        setFresh('fresh')
+                    }
+                })
+        } catch (e) {
+            Alert.alert(
+                "Server error",
+                'Sorry we can not complete your procedure right now!',
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            )
+        }
+    }
+    const verify = async () => {
+        const token = await AsyncStorage.getItem('token');
+        try {
+            return fetch('http://progr96ammer-noder.herokuapp.com/user/verify/email',{
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-Access-Token':token,
+                },
+                body: JSON.stringify({
+                    verificationCode: verificaionCode,
+                })
+            })
+                .then((response) => response.json())
+                .then((json) => {
+                    console.log(json)
                     if (json.errors){
                         json.errors.forEach(value=> {
+                            if (value.param == 'attempts') {
                                 Alert.alert(
-                                    "Server error",
-                                    'Sorry we can not complete your procedure right now!',
+                                    "Too many attempts",
+                                    json.errors.length[i].msg,
                                     [
                                         { text: "OK", onPress: () => console.log("OK Pressed") }
                                     ]
                                 )
                             }
+                            if (value.param == 'verificationCode') {
+                                setVerificaionCodeError(value.msg)
+                            }
+                        })
+                    }
+                    if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
+                        Alert.alert(
+                            "Connection Error",
+                            json,
+                            [
+                                { text: "OK", onPress: () => console.log("OK Pressed") }
+                            ]
                         )
                     }
-                    if(json.url == 'emailVerifyForm?sent=true'){
-                        setFresh('fresh')
+                    if(json.url == '/home'){
+                        navigation.navigate('home');
                     }
                 })
-                .catch((error) => {
-                    console.error(error);
-                });
         } catch (e) {
             Alert.alert(
                 "Server error",
@@ -77,9 +130,21 @@ export default function App({ navigation }) {
                         </HStack>
                         <HStack justifyContent="center">
                             <Heading color="muted.400" size="xs">
-                                A <Heading color="green.400" size="xs">{fresh}</Heading> verification link has been sent to your email address.
+                                A <Heading color="green.400" size="xs">{fresh}</Heading> verification code has been sent to your email address.
                             </Heading>
                         </HStack>
+                        <FormControl>
+                            <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                                Verification code
+                            </FormControl.Label>
+                            <Input onChangeText={(text)=>setVerificaionCode(text)} />
+                            <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                                {verificaionCodeError}
+                            </FormControl.Label>
+                        </FormControl>
+                        <Button onPress={verify} colorScheme="cyan" _text={{color: 'white' }}>
+                            Verify
+                        </Button>
                         <HStack justifyContent="center">
                             <Heading color="muted.400" size="xs">
                                 Before proceeding, please check your email for a verification link.
