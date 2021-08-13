@@ -22,7 +22,7 @@ class Loading extends Component {
     async componentDidMount() {
         const token = await AsyncStorage.getItem('token');
         try {
-            return fetch('http://localhost:3000/home',{
+            return fetch('http://progr96ammer-noder.herokuapp.com/home',{
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',
