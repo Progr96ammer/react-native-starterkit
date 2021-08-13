@@ -87,7 +87,7 @@ export default function App({ navigation }) {
                 }
                 if(json.url == '/home'){
                     storeData(json.token);
-                    navigation.navigate('home');
+                    navigation.navigate('loading');
                 }
             })
             .catch((error) => {

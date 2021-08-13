@@ -32,7 +32,6 @@ class Loading extends Component {
             })
                 .then((response) => response.json())
                 .then((json) => {
-                    console.log(json)
                     if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
                         Alert.alert(
                             "Connection Error",
@@ -65,7 +64,7 @@ class Loading extends Component {
         if(this.state.loading == 'user/emailVerifyForm'){
             navigation.navigate('emailVerifyForm');
         }
-        if(this.state.loading == 'home'){
+        else if(this.state.loading == 'home'){
             navigation.navigate('home');
         }
         return (
