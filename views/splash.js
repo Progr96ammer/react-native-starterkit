@@ -37,7 +37,7 @@ export default function home({ navigation }) {
                     navigation.navigate('login')
                 }
                 else if(storageToken != null) {
-                    navigation.navigate('loading')
+                    navigation.navigate('SyncDatabase')
                 }
             }
             setTimeout(()=>{getItem()}, 3000);
