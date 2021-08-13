@@ -6,6 +6,7 @@ import login from './views/auth/login';
 import signup from './views/auth/signup';
 import emailVerifyForm from './views/auth/emailVerifyForm';
 import splash from './views/splash';
+import loading from './views/loading';
 
 const Drawer = createDrawerNavigator();
 
@@ -15,6 +16,7 @@ class app extends Component {
             <NavigationContainer>
                 <Drawer.Navigator initialRouteName={'splash'}>
                     <Drawer.Screen name="splash" component={splash} />
+                    <Drawer.Screen name="loading" component={loading} />
                     <Drawer.Screen name="home" component={home} />
                     <Drawer.Screen name="emailVerifyForm" component={emailVerifyForm} />
                     <Drawer.Screen name="login" component={login} />
