@@ -106,7 +106,7 @@ export default function App({ navigation }) {
                     )
                 }
                 if(json.url == 'emailVerifyForm'){
-                    storeData('token',json.token);
+                    storeData(json.token);
                     navigation.navigate('emailVerifyForm');
                 }
             })

@@ -6,7 +6,7 @@ import login from './views/auth/login';
 import signup from './views/auth/signup';
 import emailVerifyForm from './views/auth/emailVerifyForm';
 import splash from './views/splash';
-import SyncDatabase from './views/syncdatabase';
+import SyncDatabase from './views/middleware/syncdatabase';
 
 const Drawer = createDrawerNavigator();
 

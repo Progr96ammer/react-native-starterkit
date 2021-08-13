@@ -17,7 +17,7 @@ import {
     Divider, Center
 } from 'native-base';
 
-class Syncdatabase extends Component {
+class SyncDatabase extends Component {
     state = { loading: true }
     async componentDidMount() {
         const token = await AsyncStorage.getItem('token');
@@ -107,4 +107,4 @@ class Syncdatabase extends Component {
     }
 }
 
-export default Syncdatabase;
+export default SyncDatabase;
