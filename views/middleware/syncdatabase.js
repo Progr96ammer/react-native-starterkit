@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
-import {Alert} from 'react-native';
+import {Alert ,Animated ,Easing , View} from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Svg, {
+    Circle,
+} from 'react-native-svg';
 import {
     NativeBaseProvider,
     Box,
@@ -17,60 +20,72 @@ import {
     Divider, Center
 } from 'native-base';
 
-class SyncDatabase extends Component {
-    state = { loading: true }
-    async componentDidMount() {
-        const token = await AsyncStorage.getItem('token');
-        try {
-            return fetch('http://progr96ammer-noder.herokuapp.com/home',{
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-Access-Token':token,
-                },
-            })
-                .then((response) => response.json())
-                .then((json) => {
-                    if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
-                        Alert.alert(
-                            "Connection Error",
-                            json,
-                            [
-                                { text: "OK", onPress: () => console.log("OK Pressed") }
-                            ]
-                        )
-                    }
-                    if (json.url == 'user/emailVerifyForm') {
-                        this.setState({ loading: 'user/emailVerifyForm'  });
-                    }
-                    if (json.url == '/home') {
-                        this.setState({ loading: 'home'  });
-                    }
-                })
-        } catch (e) {
-            Alert.alert(
-                "Server error",
-                'Sorry we can not complete your procedure right now!',
-                [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            )
-        }
-    }
+export default function home({ navigation }) {
+    const rotationRef = useRef(new Animated.Value(0)).current;
+    React.useEffect(() => {
+        navigation.addListener('focus', () => {
+            const getItem = async ()=>{
+                Animated.loop(
+                    Animated.timing(rotationRef, {
+                        toValue: 1,
+                        duration: 500,
+                        easing: Easing.linear,
+                        useNativeDriver: false,
+                    })
+                ).start();
+                const token = await AsyncStorage.getItem('token');
+                try {
+                    return fetch('http://progr96ammer-noder.herokuapp.com/home',{
+                        method: 'GET',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-Access-Token':token,
+                        },
+                    })
+                        .then((response) => response.json())
+                        .then((json) => {
+                            if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
+                                Alert.alert(
+                                    "Connection Error",
+                                    json,
+                                    [
+                                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                                    ]
+                                )
+                            }
+                            if (json.url == 'user/emailVerifyForm') {
+                                navigation.navigate('emailVerifyForm');
+                            }
+                            if (json.url == '/home') {
+                                navigation.navigate('home');
+                            }
+                        })
+                } catch (e) {
+                    Alert.alert(
+                        "Server error",
+                        'Sorry we can not complete your procedure right now!',
+                        [
+                            { text: "OK", onPress: () => console.log("OK Pressed") }
+                        ]
+                    )
+                }
+            }
+            getItem()
+        });
 
-    render() {
-        const { navigation } = this.props;
-        if(this.state.loading == 'user/emailVerifyForm'){
-            navigation.navigate('emailVerifyForm');
-        }
-        else if(this.state.loading == 'home'){
-            navigation.navigate('home');
-        }
-        return (
-            <NativeBaseProvider>
-                <Center flex={1}>
-                    <svg
+    }, [navigation]);
+    const rotation = rotationRef.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '360deg'],
+    });
+    return (
+        <NativeBaseProvider>
+            <Center flex={1}>
+                <Animated.View
+                    style={{transform: [{rotate: rotation}]}}
+                >
+                    <Svg
                         xmlns="http://www.w3.org/2000/svg"
                         style={{
                             margin: "auto",
@@ -82,7 +97,7 @@ class SyncDatabase extends Component {
                         preserveAspectRatio="xMidYMid"
                         display="block"
                     >
-                        <circle
+                        <Circle
                             cx={50}
                             cy={50}
                             fill="none"
@@ -91,20 +106,10 @@ class SyncDatabase extends Component {
                             r={35}
                             strokeDasharray="164.93361431346415 56.97787143782138"
                         >
-                            <animateTransform
-                                attributeName="transform"
-                                type="rotate"
-                                repeatCount="indefinite"
-                                dur="1s"
-                                values="0 50 50;360 50 50"
-                                keyTimes="0;1"
-                            />
-                        </circle>
-                    </svg>
-                </Center>
-            </NativeBaseProvider>
-        );
-    }
+                        </Circle>
+                    </Svg>
+                </Animated.View>
+            </Center>
+        </NativeBaseProvider>
+    );
 }
-
-export default SyncDatabase;
