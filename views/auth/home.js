@@ -25,7 +25,7 @@ export default function home({ navigation }) {
                         ]
                     )
                 }
-                if (json.url == './'){
+                if (json.url == '../'){
                     AsyncStorage.removeItem('token');
                     navigation.navigate('login');
                 }

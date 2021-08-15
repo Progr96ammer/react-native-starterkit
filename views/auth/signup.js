@@ -181,12 +181,11 @@ export default function App({ navigation }) {
                             SignUp
                         </Button>
                     </VStack>
-                    <HStack justifyContent="center">
-                        <Text fontSize='sm' color='muted.700' fontWeight={400}>I have an account. </Text>
-                        <Link onPress={() => navigation.navigate('login')} _text={{ color: 'cyan.500', bold: true, fontSize: 'sm' }} >
+                    <VStack justifyContent="center">
+                        <Button onPress={() => navigation.navigate('login')} colorScheme="cyan" _text={{color: 'white' }}>
                             Login
-                        </Link>
-                    </HStack>
+                        </Button>
+                    </VStack>
                 </VStack>
             </Box>
         </NativeBaseProvider>

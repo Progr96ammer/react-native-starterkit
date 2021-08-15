@@ -20,11 +20,12 @@ import {
 } from 'native-base';
 import {verticalAlign} from "styled-system";
 
-export default function App({ navigation }) {
-    const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
+export default function App({ route,navigation }) {
+    const [email, setEmail] = useState(route.params.credential);
+    const [newPassword, setNewPassword] = useState('');
+    const [newPasswordError, setNewPasswordError] = useState('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [confirmNewPasswordError, setConfirmNewPasswordError] = useState('');
 
     const storeData = async (value) => {
         try {
@@ -40,8 +41,8 @@ export default function App({ navigation }) {
         }
     }
 
-    const login = () => {
-        return fetch('http://progr96ammer-noder.herokuapp.com/user/login',{
+    const reset = () => {
+        return fetch('http://progr96ammer-noder.herokuapp.com/user/resetPassword',{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -49,13 +50,14 @@ export default function App({ navigation }) {
             },
             body: JSON.stringify({
                 credential: email,
-                password: password
+                newPassword:newPassword,
+                confirmPassword:confirmNewPassword,
             })
         })
             .then((response) => response.json())
             .then((json) => {
-                setEmailError('')
-                setPasswordError('')
+                setNewPasswordError('')
+                setConfirmNewPasswordError('')
                 if (json.errors){
                     json.errors.forEach(value=> {
                             if (value.param == 'attempts') {
@@ -67,12 +69,12 @@ export default function App({ navigation }) {
                                     ]
                                 )
                             }
-                        if (value.param == 'credential') {
-                            setEmailError(value.msg)
-                        }
-                        if (value.param == 'password') {
-                            setPasswordError(value.msg)
-                        }
+                            if (value.param == 'newPassword') {
+                                setNewPasswordError(value.msg)
+                            }
+                            if (value.param == 'confirmPassword') {
+                                setConfirmNewPasswordError(value.msg)
+                            }
                         }
                     )
                 }
@@ -87,7 +89,7 @@ export default function App({ navigation }) {
                 }
                 if(json.url == '/home'){
                     storeData(json.token);
-                    navigation.navigate('SyncDatabase');
+                    navigation.navigate('home');
                 }
             })
             .catch((error) => {
@@ -111,45 +113,28 @@ export default function App({ navigation }) {
                 </Heading>
 
                 <VStack space={2} mt={5}>
-                    <FormControl>
-                        <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                            E-mail or username
+
+                    <FormControl mb={5}>
+                        <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                            New Password
                         </FormControl.Label>
-                        <Input onChangeText={(text)=>setEmail(text)} />
+                        <Input onChangeText={(text)=>setNewPassword(text)} type="password" />
                         <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                            {emailError}
+                            {newPasswordError}
                         </FormControl.Label>
                     </FormControl>
                     <FormControl mb={5}>
                         <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                            Password
+                            Confirm New Password
                         </FormControl.Label>
-                        <Input onChangeText={(text)=>setPassword(text)} type="password" />
+                        <Input onChangeText={(text)=>setConfirmNewPassword(text)} type="password" />
                         <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                            {passwordError}
+                            {confirmNewPasswordError}
                         </FormControl.Label>
-                        <Link
-                            onPress={() => navigation.navigate('forgetPassword')}
-                            _text={{ fontSize: 'xs', fontWeight: '700', color:'cyan.500' }}
-                            alignSelf="flex-end"
-                            mt={1}
-                        >
-                            Forget Password?
-                        </Link>
                     </FormControl>
                     <VStack  space={2}>
-                        <Button onPress={login} colorScheme="cyan" _text={{color: 'white' }}>
-                            Login
-                        </Button>
-                    </VStack>
-                    <Center>
-                        <HStack>
-                            <Heading color="muted.400" size="xs"> You're a new user.? </Heading>
-                        </HStack>
-                    </Center>
-                    <VStack  space={2}>
-                        <Button onPress={() => navigation.navigate('signup')} colorScheme="cyan" _text={{color: 'white' }}>
-                            Signup
+                        <Button onPress={reset} colorScheme="cyan" _text={{color: 'white' }}>
+                            Reset
                         </Button>
                     </VStack>
                 </VStack>

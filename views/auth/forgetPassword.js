@@ -18,30 +18,12 @@ import {
     HStack,
     Divider, Center
 } from 'native-base';
-import {verticalAlign} from "styled-system";
 
 export default function App({ navigation }) {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-
-    const storeData = async (value) => {
-        try {
-            await AsyncStorage.setItem('token', JSON.stringify(value))
-        } catch (e) {
-            Alert.alert(
-                "Server error",
-                'Sorry we can not complete your procedure right now!',
-                [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            )
-        }
-    }
-
-    const login = () => {
-        return fetch('http://progr96ammer-noder.herokuapp.com/user/login',{
+    const send = () => {
+        return fetch('http://progr96ammer-noder.herokuapp.com/user/sendResetPassword',{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -49,13 +31,11 @@ export default function App({ navigation }) {
             },
             body: JSON.stringify({
                 credential: email,
-                password: password
             })
         })
             .then((response) => response.json())
             .then((json) => {
                 setEmailError('')
-                setPasswordError('')
                 if (json.errors){
                     json.errors.forEach(value=> {
                             if (value.param == 'attempts') {
@@ -67,12 +47,9 @@ export default function App({ navigation }) {
                                     ]
                                 )
                             }
-                        if (value.param == 'credential') {
-                            setEmailError(value.msg)
-                        }
-                        if (value.param == 'password') {
-                            setPasswordError(value.msg)
-                        }
+                            if (value.param == 'credential') {
+                                setEmailError(value.msg)
+                            }
                         }
                     )
                 }
@@ -85,9 +62,10 @@ export default function App({ navigation }) {
                         ]
                     )
                 }
-                if(json.url == '/home'){
-                    storeData(json.token);
-                    navigation.navigate('SyncDatabase');
+                if(json.url == 'confirmResetPasswordForm?credential='+email+''){
+                    navigation.navigate('PasswordResetVerify',{
+                        credential:email,
+                    });
                 }
             })
             .catch((error) => {
@@ -107,7 +85,7 @@ export default function App({ navigation }) {
                     Welcome
                 </Heading>
                 <Heading color="muted.400" size="xs">
-                    Sign in to continue!
+                    Enter E-mail/Username in to continue!
                 </Heading>
 
                 <VStack space={2} mt={5}>
@@ -120,36 +98,9 @@ export default function App({ navigation }) {
                             {emailError}
                         </FormControl.Label>
                     </FormControl>
-                    <FormControl mb={5}>
-                        <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                            Password
-                        </FormControl.Label>
-                        <Input onChangeText={(text)=>setPassword(text)} type="password" />
-                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                            {passwordError}
-                        </FormControl.Label>
-                        <Link
-                            onPress={() => navigation.navigate('forgetPassword')}
-                            _text={{ fontSize: 'xs', fontWeight: '700', color:'cyan.500' }}
-                            alignSelf="flex-end"
-                            mt={1}
-                        >
-                            Forget Password?
-                        </Link>
-                    </FormControl>
                     <VStack  space={2}>
-                        <Button onPress={login} colorScheme="cyan" _text={{color: 'white' }}>
+                        <Button onPress={send} colorScheme="cyan" _text={{color: 'white' }}>
                             Login
-                        </Button>
-                    </VStack>
-                    <Center>
-                        <HStack>
-                            <Heading color="muted.400" size="xs"> You're a new user.? </Heading>
-                        </HStack>
-                    </Center>
-                    <VStack  space={2}>
-                        <Button onPress={() => navigation.navigate('signup')} colorScheme="cyan" _text={{color: 'white' }}>
-                            Signup
                         </Button>
                     </VStack>
                 </VStack>

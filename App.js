@@ -7,6 +7,9 @@ import signup from './views/auth/signup';
 import emailVerifyForm from './views/auth/emailVerifyForm';
 import splash from './views/splash';
 import SyncDatabase from './views/middleware/syncdatabase';
+import forgetPassword from './views/auth/forgetPassword';
+import PasswordResetVerify from './views/auth/PasswordResetVerify';
+import resetPassword from './views/auth/resetPassword';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,6 +24,9 @@ class app extends Component {
                     <Drawer.Screen name="emailVerifyForm" component={emailVerifyForm} />
                     <Drawer.Screen name="login" component={login} />
                     <Drawer.Screen name="signup" component={signup} />
+                    <Drawer.Screen name="forgetPassword" component={forgetPassword} />
+                    <Drawer.Screen name="PasswordResetVerify" component={PasswordResetVerify} />
+                    <Drawer.Screen name="resetPassword" component={resetPassword} />
                 </Drawer.Navigator>
             </NavigationContainer>
         );

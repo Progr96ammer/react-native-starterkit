@@ -21,20 +21,24 @@ import {
 } from 'native-base';
 import {verticalAlign} from "styled-system";
 
-export default function App({ navigation }) {
+export default function App({route, navigation }) {
     const [fresh, setFresh] = useState('');
     const [verificaionCode, setVerificaionCode] = useState('');
     const [verificaionCodeError, setVerificaionCodeError] = useState('');
+    const [email, setEmail] = useState(route.params.credential);
     const sendFresh = async () => {
         const token = await AsyncStorage.getItem('token');
         try {
-            return fetch('http://progr96ammer-noder.herokuapp.com/user/sendEmailVerify',{
+            return fetch('http://progr96ammer-noder.herokuapp.com/user/sendResetPassword',{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                     'X-Access-Token':token,
                 },
+                body: JSON.stringify({
+                    credential: email,
+                })
             })
                 .then((response) => response.json())
                 .then((json) => {
@@ -47,8 +51,7 @@ export default function App({ navigation }) {
                             ]
                         )
                     }
-                    console.log(json)
-                    if(json.url == 'emailVerifyForm?sent=true'){
+                    if(json.url == 'confirmResetPasswordForm?credential='+email+''){
                         setFresh('fresh')
                     }
                 })
@@ -63,22 +66,20 @@ export default function App({ navigation }) {
         }
     }
     const verify = async () => {
-        const token = await AsyncStorage.getItem('token');
         try {
-            return fetch('http://progr96ammer-noder.herokuapp.com/user/verify/email',{
+            return fetch('http://progr96ammer-noder.herokuapp.com/user/confirmResetPassword',{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    'X-Access-Token':token,
                 },
                 body: JSON.stringify({
                     verificationCode: verificaionCode,
+                    credential:email,
                 })
             })
                 .then((response) => response.json())
                 .then((json) => {
-                    console.log(json)
                     if (json.errors){
                         json.errors.forEach(value=> {
                             if (value.param == 'attempts') {
@@ -104,8 +105,10 @@ export default function App({ navigation }) {
                             ]
                         )
                     }
-                    if(json.url == '/home'){
-                        navigation.navigate('home');
+                    if(json.url == 'resetpassword/email?credential='+email+''){
+                        navigation.navigate('resetPassword',{
+                            credential:email,
+                        });
                     }
                 })
         } catch (e) {
@@ -125,7 +128,7 @@ export default function App({ navigation }) {
                     <VStack space={2} mt={5}>
                         <HStack justifyContent="center">
                             <Heading size="lg" color='primary.500'>
-                                Email verification
+                                Reset Password
                             </Heading>
                         </HStack>
                         <HStack justifyContent="center">
