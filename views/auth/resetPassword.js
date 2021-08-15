@@ -33,7 +33,7 @@ export default function App({ route,navigation }) {
         } catch (e) {
             Alert.alert(
                 "Server error",
-                'Sorry we can not complete your procedure right now!',
+                'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
                 [
                     { text: "OK", onPress: () => console.log("OK Pressed") }
                 ]
@@ -93,7 +93,13 @@ export default function App({ route,navigation }) {
                 }
             })
             .catch((error) => {
-                console.error(error);
+                Alert.alert(
+                    "Server error",
+                    'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                )
             });
     }
     return (

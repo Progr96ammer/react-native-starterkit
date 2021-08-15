@@ -55,7 +55,7 @@ export default function App({ navigation }) {
         } catch (e) {
             Alert.alert(
                 "Server error",
-                'Sorry we can not complete your procedure right now!',
+                'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
                 [
                     { text: "OK", onPress: () => console.log("OK Pressed") }
                 ]
@@ -111,7 +111,7 @@ export default function App({ navigation }) {
         } catch (e) {
             Alert.alert(
                 "Server error",
-                'Sorry we can not complete your procedure right now!',
+                'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
                 [
                     { text: "OK", onPress: () => console.log("OK Pressed") }
                 ]

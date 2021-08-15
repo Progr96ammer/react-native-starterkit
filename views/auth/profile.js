@@ -18,18 +18,15 @@ import {
     HStack,
     Divider
 } from 'native-base';
+import jwt from "jsonwebtoken";
 
 export default function App({ navigation }) {
     const [name, setName] = useState('');
     const [nameError, setNameError] = useState('');
     const [username, setUsername] = useState('');
     const [usernameError, setUsernameError] = useState('');
-    const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
     const storeData = async (value) => {
         try {
@@ -44,29 +41,46 @@ export default function App({ navigation }) {
             )
         }
     }
+    React.useEffect(() => {
+        const getProfile = async () => {
+            const token = await AsyncStorage.getItem('token');
+            try {
+                var decoded = jwt.decode(JSON.parse(token).reftoken);
+                setName(decoded.user.name)
+                setUsername(decoded.user.username)
+            } catch(err) {
+                Alert.alert(
+                    "Server error",
+                    'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                )
+            }
+        }
+        getProfile()
+    })
 
-    const signup = () => {
-        return fetch('http://progr96ammer-noder.herokuapp.com/user/register',{
+    const update = async () => {
+        const token = await AsyncStorage.getItem('token');
+        return fetch('http://progr96ammer-noder.herokuapp.com/user/profile',{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-Access-Token':token,
             },
             body: JSON.stringify({
                 name: name,
                 username: username,
-                email: email,
                 password: password,
-                confirmPassword:confirmPassword,
             })
         })
             .then((response) => response.json())
             .then((json) => {
                 setNameError('')
                 setUsernameError('')
-                setEmailError('')
                 setPasswordError('')
-                setConfirmPasswordError('')
                 if (json.errors){
                     json.errors.forEach(value=> {
                             if (value.param == 'attempts') {
@@ -84,14 +98,8 @@ export default function App({ navigation }) {
                             if (value.param == 'username') {
                                 setUsernameError(value.msg)
                             }
-                            if (value.param == 'email') {
-                                setEmailError(value.msg)
-                            }
                             if (value.param == 'password') {
                                 setPasswordError(value.msg)
-                            }
-                            if (value.param == 'confirmPassword') {
-                                setConfirmPasswordError(value.msg)
                             }
                         }
                     )
@@ -105,9 +113,10 @@ export default function App({ navigation }) {
                         ]
                     )
                 }
-                if(json.url == 'emailVerifyForm'){
+                if(json.url == 'profile'){
+                    console.log(json.token)
                     storeData(json.token);
-                    navigation.navigate('emailVerifyForm');
+                    navigation.navigate('profile');
                 }
             })
             .catch((error) => {
@@ -133,7 +142,7 @@ export default function App({ navigation }) {
                     Welcome
                 </Heading>
                 <Heading color="muted.400" size="xs">
-                    Sign up to continue!
+                    Profile
                 </Heading>
 
                 <VStack space={2} mt={5}>
@@ -156,15 +165,6 @@ export default function App({ navigation }) {
                         </FormControl.Label>
                     </FormControl>
                     <FormControl>
-                        <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                            Email
-                        </FormControl.Label>
-                        <Input onChangeText={(text)=>setEmail(text)}/>
-                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                            {emailError}
-                        </FormControl.Label>
-                    </FormControl>
-                    <FormControl>
                         <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
                             Password
                         </FormControl.Label>
@@ -173,23 +173,9 @@ export default function App({ navigation }) {
                             {passwordError}
                         </FormControl.Label>
                     </FormControl>
-                    <FormControl>
-                        <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                            Confirm Password
-                        </FormControl.Label>
-                        <Input onChangeText={(text)=>setConfirmPassword(text)} type="password" />
-                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                            {confirmPasswordError}
-                        </FormControl.Label>
-                    </FormControl>
                     <VStack  space={2}  mt={5}>
-                        <Button onPress={signup} colorScheme="cyan" _text={{color: 'white' }}>
-                            SignUp
-                        </Button>
-                    </VStack>
-                    <VStack justifyContent="center">
-                        <Button onPress={() => navigation.navigate('login')} colorScheme="cyan" _text={{color: 'white' }}>
-                            Login
+                        <Button onPress={update} colorScheme="cyan" _text={{color: 'white' }}>
+                            Update
                         </Button>
                     </VStack>
                 </VStack>

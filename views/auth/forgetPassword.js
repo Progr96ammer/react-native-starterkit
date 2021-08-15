@@ -69,7 +69,13 @@ export default function App({ navigation }) {
                 }
             })
             .catch((error) => {
-                console.error(error);
+                Alert.alert(
+                    "Server error",
+                    'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                )
             });
     }
     return (

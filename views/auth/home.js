@@ -32,7 +32,13 @@ export default function home({ navigation }) {
 
             })
             .catch((error) => {
-                console.error(error);
+                Alert.alert(
+                    "Server error",
+                    'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                )
             });
     }
     return (
@@ -44,8 +50,8 @@ export default function home({ navigation }) {
                 title="logout"
             />
             <Button
-                onPress={() => {navigation.navigate('login')}}
-                title="login"
+                onPress={() => {navigation.navigate('profile')}}
+                title="profile"
             />
         </View>
     );
