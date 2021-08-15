@@ -22,8 +22,10 @@ import jwt from "jsonwebtoken";
 
 export default function App({ navigation }) {
     const [name, setName] = useState('');
+    const [profileName, setProfileName] = useState('');
     const [nameError, setNameError] = useState('');
     const [username, setUsername] = useState('');
+    const [profileUsername, setProfileUsername] = useState('');
     const [usernameError, setUsernameError] = useState('');
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
@@ -46,8 +48,8 @@ export default function App({ navigation }) {
             const token = await AsyncStorage.getItem('token');
             try {
                 var decoded = jwt.decode(JSON.parse(token).reftoken);
-                setName(decoded.user.name)
-                setUsername(decoded.user.username)
+                setProfileName(decoded.user.name)
+                setProfileUsername(decoded.user.username)
             } catch(err) {
                 Alert.alert(
                     "Server error",
@@ -114,7 +116,6 @@ export default function App({ navigation }) {
                     )
                 }
                 if(json.url == 'profile'){
-                    console.log(json.token)
                     storeData(json.token);
                     navigation.navigate('profile');
                 }
@@ -150,7 +151,7 @@ export default function App({ navigation }) {
                         <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
                             Name
                         </FormControl.Label>
-                        <Input onChangeText={(text)=>setName(text)} />
+                        <Input placeholder={profileName} onChangeText={(text)=>setName(text)} />
                         <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
                             {nameError}
                         </FormControl.Label>
@@ -159,7 +160,7 @@ export default function App({ navigation }) {
                         <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
                             Username
                         </FormControl.Label>
-                        <Input onChangeText={(text)=>setUsername(text)}/>
+                        <Input placeholder={profileUsername} onChangeText={(text)=>setUsername(text)}/>
                         <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
                             {usernameError}
                         </FormControl.Label>
