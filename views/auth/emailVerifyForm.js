@@ -47,7 +47,6 @@ export default function App({ navigation }) {
                             ]
                         )
                     }
-                    console.log(json)
                     if(json.url == 'emailVerifyForm?sent=true'){
                         setFresh('fresh')
                     }
@@ -78,7 +77,6 @@ export default function App({ navigation }) {
             })
                 .then((response) => response.json())
                 .then((json) => {
-                    console.log(json)
                     if (json.errors){
                         json.errors.forEach(value=> {
                             if (value.param == 'attempts') {

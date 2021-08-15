@@ -167,7 +167,7 @@ export default function App({ navigation }) {
                     </FormControl>
                     <FormControl>
                         <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                            Password
+                            Current Password
                         </FormControl.Label>
                         <Input onChangeText={(text)=>setPassword(text)} type="password" />
                         <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
