@@ -2,6 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import {Alert, Button, StyleSheet, Text, View} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+
+const Drawer = createDrawerNavigator();
 
 export default function home({ navigation }) {
     const  logout = async () => {
@@ -32,18 +36,36 @@ export default function home({ navigation }) {
 
             })
     }
+    const HomeConent = ()=>{
+        return(
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <StatusBar
+                    hidden={true} />
+                <Button
+                    onPress={logout}
+                    title="logout"
+                />
+                <Button
+                    onPress={() => {navigation.navigate('deleteAccount')}}
+                    title="deleteAccount"
+                />
+            </View>
+        )
+    }
+    const HomeDrawer = ()=>{
+        return(
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            </View>
+        )
+    }
+
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <StatusBar
-                hidden={true} />
-            <Button
-                onPress={logout}
-                title="logout"
-            />
-            <Button
-                onPress={() => {navigation.navigate('deleteAccount')}}
-                title="deleteAccount"
-            />
-        </View>
+        <Drawer.Navigator
+            drawerPosition={'right'}
+            initialRouteName={'homeContent'}
+            drawerContent={(props) => <HomeDrawer {...props} />}
+        >
+            <Drawer.Screen name="Home" component={HomeConent} />
+        </Drawer.Navigator>
     );
 }

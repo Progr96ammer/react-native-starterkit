@@ -1,7 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { Component } from "react";
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import home from './views/auth/home';
 import login from './views/auth/login';
@@ -16,7 +15,6 @@ import profile from './views/auth/profile';
 import updatePassword from './views/auth/updatePassword';
 import deleteAccount from './views/auth/deleteAccount';
 
-const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 class app extends Component {
