@@ -60,6 +60,10 @@ export default function home({ navigation }) {
                             if (json.url == '/home') {
                                 navigation.navigate('home');
                             }
+                            if (json.url == '/sessionNotFound') {
+                                AsyncStorage.removeItem('token');
+                                navigation.navigate('login');
+                            }
                         })
                 } catch (e) {
                     Alert.alert(
