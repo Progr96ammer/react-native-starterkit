@@ -1,4 +1,6 @@
+import 'react-native-gesture-handler';
 import React, { Component } from "react";
+import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import home from './views/auth/home';
@@ -13,23 +15,24 @@ import resetPassword from './views/auth/resetPassword';
 import profile from './views/auth/profile';
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 class app extends Component {
     render() {
         return (
             <NavigationContainer>
-                <Drawer.Navigator initialRouteName={'splash'}>
-                    <Drawer.Screen name="splash" component={splash} />
-                    <Drawer.Screen name="SyncDatabase" component={SyncDatabase} />
-                    <Drawer.Screen name="home" component={home} />
-                    <Drawer.Screen name="emailVerifyForm" component={emailVerifyForm} />
-                    <Drawer.Screen name="login" component={login} />
-                    <Drawer.Screen name="signup" component={signup} />
-                    <Drawer.Screen name="forgetPassword" component={forgetPassword} />
-                    <Drawer.Screen name="PasswordResetVerify" component={PasswordResetVerify} />
-                    <Drawer.Screen name="resetPassword" component={resetPassword} />
-                    <Drawer.Screen name="profile" component={profile} />
-                </Drawer.Navigator>
+                <Stack.Navigator initialRouteName={'splash'}>
+                    <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="splash" component={splash} />
+                    <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="SyncDatabase" component={SyncDatabase} />
+                    <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="home" component={home} />
+                    <Stack.Screen name="emailVerifyForm" component={emailVerifyForm} />
+                    <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="login" component={login} />
+                    <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="signup" component={signup} />
+                    <Stack.Screen name="forgetPassword" component={forgetPassword} />
+                    <Stack.Screen name="PasswordResetVerify" component={PasswordResetVerify} />
+                    <Stack.Screen name="resetPassword" component={resetPassword} />
+                    <Stack.Screen name="profile" component={profile} />
+                </Stack.Navigator>
             </NavigationContainer>
         );
     }

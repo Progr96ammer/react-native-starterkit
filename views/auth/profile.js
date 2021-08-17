@@ -1,8 +1,6 @@
-import * as React from 'react';
-import {useState} from 'react';
 import {Alert} from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import jwt from "jwt-decode";
 import {
     NativeBaseProvider,
     Box,
@@ -18,19 +16,36 @@ import {
     HStack,
     Divider
 } from 'native-base';
-import jwt from "jsonwebtoken";
+import React, { Component } from 'react';
 
-export default function App({ navigation }) {
-    const [name, setName] = useState('');
-    const [profileName, setProfileName] = useState('');
-    const [nameError, setNameError] = useState('');
-    const [username, setUsername] = useState('');
-    const [profileUsername, setProfileUsername] = useState('');
-    const [usernameError, setUsernameError] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-
-    const storeData = async (value) => {
+class profile extends Component {
+    state = {
+        name: '',
+        nameError: '',
+        username: '',
+        usernameError: '',
+        password: '',
+        passwordError: '',
+    };
+    async componentDidMount() {
+        const token = await AsyncStorage.getItem('token');
+        try {
+            var decoded = jwt(JSON.parse(token).reftoken);
+            console.log(this.state.name)
+            this.setState({name:decoded.user.name})
+            this.setState({username:decoded.user.username})
+            console.log(this.state.name)
+        } catch(err) {
+            Alert.alert(
+                "Server error",
+                'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            )
+        }
+    }
+    storeData = async (value) => {
         try {
             await AsyncStorage.setItem('token', JSON.stringify(value))
         } catch (e) {
@@ -43,27 +58,7 @@ export default function App({ navigation }) {
             )
         }
     }
-    React.useEffect(() => {
-        const getProfile = async () => {
-            const token = await AsyncStorage.getItem('token');
-            try {
-                var decoded = jwt.decode(JSON.parse(token).reftoken);
-                setProfileName(decoded.user.name)
-                setProfileUsername(decoded.user.username)
-            } catch(err) {
-                Alert.alert(
-                    "Server error",
-                    'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
-                    [
-                        { text: "OK", onPress: () => console.log("OK Pressed") }
-                    ]
-                )
-            }
-        }
-        getProfile()
-    })
-
-    const update = async () => {
+    update = async () => {
         const token = await AsyncStorage.getItem('token');
         return fetch('http://progr96ammer-noder.herokuapp.com/user/profile',{
             method: 'POST',
@@ -73,16 +68,16 @@ export default function App({ navigation }) {
                 'X-Access-Token':token,
             },
             body: JSON.stringify({
-                name: name,
-                username: username,
-                password: password,
+                name: this.state.name,
+                username: this.state.username,
+                password: this.state.password,
             })
         })
             .then((response) => response.json())
             .then((json) => {
-                setNameError('')
-                setUsernameError('')
-                setPasswordError('')
+                this.setState({nameError:''})
+                this.setState({usernameError:''})
+                this.setState({passwordError:''})
                 if (json.errors){
                     json.errors.forEach(value=> {
                             if (value.param == 'attempts') {
@@ -95,13 +90,13 @@ export default function App({ navigation }) {
                                 )
                             }
                             if (value.param == 'name') {
-                                setNameError(value.msg)
+                                this.setState({nameError:value.msg})
                             }
                             if (value.param == 'username') {
-                                setUsernameError(value.msg)
+                                this.setState({usernameError:value.msg})
                             }
                             if (value.param == 'password') {
-                                setPasswordError(value.msg)
+                                this.setState({passwordError:value.msg})
                             }
                         }
                     )
@@ -116,71 +111,66 @@ export default function App({ navigation }) {
                     )
                 }
                 if(json.url == 'profile'){
-                    storeData(json.token);
-                    navigation.navigate('profile');
+                    this.storeData(json.token);
+                    this.props.navigation.goBack();
                 }
             })
-            .catch((error) => {
-                Alert.alert(
-                    "Server error",
-                    'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
-                    [
-                        { text: "OK", onPress: () => console.log("OK Pressed") }
-                    ]
-                )
-            });
     }
-    return (
-        <NativeBaseProvider>
-            <Box
-                style={{paddingTop:40}}
-                flex={1}
-                p={2}
-                w="90%"
-                mx='auto'
-            >
-                <Heading size="lg" color='primary.500'>
-                    Welcome
-                </Heading>
-                <Heading color="muted.400" size="xs">
-                    Profile
-                </Heading>
+    render() {
+        return (
+            <NativeBaseProvider>
+                <Box
+                    style={{paddingTop:40}}
+                    flex={1}
+                    p={2}
+                    w="90%"
+                    mx='auto'
+                >
+                    <Heading size="lg" color='primary.500'>
+                        Welcome
+                    </Heading>
+                    <Heading color="muted.400" size="xs">
+                        Profile
+                    </Heading>
 
-                <VStack space={2} mt={5}>
-                    <FormControl>
-                        <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                            Name
-                        </FormControl.Label>
-                        <Input placeholder={profileName} onChangeText={(text)=>setName(text)} />
-                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                            {nameError}
-                        </FormControl.Label>
-                    </FormControl>
-                    <FormControl>
-                        <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                            Username
-                        </FormControl.Label>
-                        <Input placeholder={profileUsername} onChangeText={(text)=>setUsername(text)}/>
-                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                            {usernameError}
-                        </FormControl.Label>
-                    </FormControl>
-                    <FormControl>
-                        <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                            Current Password
-                        </FormControl.Label>
-                        <Input onChangeText={(text)=>setPassword(text)} type="password" />
-                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                            {passwordError}
-                        </FormControl.Label>
-                    </FormControl>
-                    <VStack  space={2}  mt={5}>
-                        <Button onPress={update} colorScheme="cyan" _text={{color: 'white' }}>
-                            Update
-                        </Button>
+                    <VStack space={2} mt={5}>
+                        <FormControl>
+                            <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                                Name
+                            </FormControl.Label>
+                            <Input value={this.state.name} onChangeText={(text)=>this.setState({name:text})}/>
+                            <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                                {this.state.nameError}
+                            </FormControl.Label>
+                        </FormControl>
+                        <FormControl>
+                            <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                                Username
+                            </FormControl.Label>
+                            <Input value={this.state.username} onChangeText={(text)=>this.setState({username:text})}/>
+                            <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                                {this.state.usernameError}
+                            </FormControl.Label>
+                        </FormControl>
+                        <FormControl>
+                            <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                                Current Password
+                            </FormControl.Label>
+                            <Input onChangeText={(text)=>this.setState({password:text})} type="password" />
+                            <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                                {this.state.passwordError}
+                            </FormControl.Label>
+                        </FormControl>
+                        <VStack  space={2}  mt={5}>
+                            <Button onPress={this.update} colorScheme="cyan" _text={{color: 'white' }}>
+                                Update
+                            </Button>
+                        </VStack>
                     </VStack>
-                </VStack>
-            </Box>
-        </NativeBaseProvider>
-    );
+                </Box>
+            </NativeBaseProvider>
+        );
+    }
 }
+
+export default profile;
