@@ -20,42 +20,33 @@ import {
 } from 'native-base';
 import {verticalAlign} from "styled-system";
 
-export default function App({ route,navigation }) {
-    const [email, setEmail] = useState(route.params.credential);
+export default function App({ navigation :{goBack}}) {
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [currentPasswordError, setCurrentPasswordError] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [newPasswordError, setNewPasswordError] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [confirmNewPasswordError, setConfirmNewPasswordError] = useState('');
 
-    const storeData = async (value) => {
-        try {
-            await AsyncStorage.setItem('token', JSON.stringify(value))
-        } catch (e) {
-            Alert.alert(
-                "Server error",
-                'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
-                [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            )
-        }
-    }
-
-    const reset = () => {
-        return fetch('http://progr96ammer-noder.herokuapp.com/user/resetPassword',{
+    const update = async () => {
+        const token = await AsyncStorage.getItem('token');
+        return fetch('http://progr96ammer-noder.herokuapp.com/user/updatePassword',{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-Access-Token':token,
+
             },
             body: JSON.stringify({
-                credential: email,
+                currentPassword:currentPassword,
                 newPassword:newPassword,
                 confirmPassword:confirmNewPassword,
             })
         })
             .then((response) => response.json())
             .then((json) => {
+                setCurrentPasswordError('')
                 setNewPasswordError('')
                 setConfirmNewPasswordError('')
                 if (json.errors){
@@ -68,6 +59,9 @@ export default function App({ route,navigation }) {
                                         { text: "OK", onPress: () => console.log("OK Pressed") }
                                     ]
                                 )
+                            }
+                            if (value.param == 'currentPassword') {
+                                setCurrentPasswordError(value.msg)
                             }
                             if (value.param == 'newPassword') {
                                 setNewPasswordError(value.msg)
@@ -87,9 +81,8 @@ export default function App({ route,navigation }) {
                         ]
                     )
                 }
-                if(json.url == '/home'){
-                    storeData(json.token);
-                    navigation.navigate('home');
+                if(json.url == 'profile'){
+                    goBack();
                 }
             })
     }
@@ -113,6 +106,15 @@ export default function App({ route,navigation }) {
 
                     <FormControl mb={5}>
                         <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                            Current Password
+                        </FormControl.Label>
+                        <Input onChangeText={(text)=>setCurrentPassword(text)} type="password" />
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {currentPasswordError}
+                        </FormControl.Label>
+                    </FormControl>
+                    <FormControl mb={5}>
+                        <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
                             New Password
                         </FormControl.Label>
                         <Input onChangeText={(text)=>setNewPassword(text)} type="password" />
@@ -130,8 +132,8 @@ export default function App({ route,navigation }) {
                         </FormControl.Label>
                     </FormControl>
                     <VStack  space={2}>
-                        <Button onPress={reset} colorScheme="cyan" _text={{color: 'white' }}>
-                            Reset
+                        <Button onPress={update} colorScheme="cyan" _text={{color: 'white' }}>
+                            Update
                         </Button>
                     </VStack>
                 </VStack>

@@ -31,15 +31,6 @@ export default function home({ navigation }) {
                 }
 
             })
-            .catch((error) => {
-                Alert.alert(
-                    "Server error",
-                    'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!',
-                    [
-                        { text: "OK", onPress: () => console.log("OK Pressed") }
-                    ]
-                )
-            });
     }
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -50,8 +41,8 @@ export default function home({ navigation }) {
                 title="logout"
             />
             <Button
-                onPress={() => {navigation.navigate('profile')}}
-                title="profile"
+                onPress={() => {navigation.navigate('deleteAccount')}}
+                title="deleteAccount"
             />
         </View>
     );
