@@ -20,20 +20,18 @@ import {
     Divider, Center
 } from 'native-base';
 
-export default function home({ navigation }) {
+export default function SyncDatabase({ navigation }) {
     const rotationRef = useRef(new Animated.Value(0)).current;
-    React.useEffect(() => {
-        navigation.addListener('focus', () => {
+    Animated.loop(
+        Animated.timing(rotationRef, {
+            toValue: 1,
+            duration: 500,
+            easing: Easing.linear,
+            useNativeDriver: false,
+        })
+    ).start();
             const getItem = async ()=>{
-                Animated.loop(
-                    Animated.timing(rotationRef, {
-                        toValue: 1,
-                        duration: 500,
-                        easing: Easing.linear,
-                        useNativeDriver: false,
-                    })
-                ).start();
-                const token = await AsyncStorage.getItem('token');
+                let token = await AsyncStorage.getItem('token');
                 try {
                     return fetch('http://progr96ammer-noder.herokuapp.com/home',{
                         method: 'GET',
@@ -76,9 +74,6 @@ export default function home({ navigation }) {
                 }
             }
             getItem()
-        });
-
-    }, [navigation]);
     const rotation = rotationRef.interpolate({
         inputRange: [0, 1],
         outputRange: ['0deg', '360deg'],
@@ -98,8 +93,6 @@ export default function home({ navigation }) {
                         width={50}
                         height={50}
                         viewBox="0 0 100 100"
-                        preserveAspectRatio="xMidYMid"
-                        display="block"
                     >
                         <Circle
                             cx={50}

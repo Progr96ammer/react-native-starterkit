@@ -28,7 +28,13 @@ export default function home({ navigation }) {
         navigation.addListener('focus', () => {
             const getItem = async ()=>{
                 try {
-                    var storageToken = await AsyncStorage.getItem('token')
+                    const storageToken = await AsyncStorage.getItem('token')
+                    if(storageToken != null) {
+                        navigation.navigate('SyncDatabase')
+                    }
+                    else{
+                        navigation.navigate('login')
+                    }
                 } catch (e) {
                     Alert.alert(
                         "Server error",
@@ -37,12 +43,6 @@ export default function home({ navigation }) {
                             { text: "OK", onPress: () => setTimeout(function(){navigation.navigate('login') }, 3000) }
                         ]
                     )
-                }
-                if (storageToken == null){
-                    navigation.navigate('login')
-                }
-                else if(storageToken != null) {
-                    navigation.navigate('SyncDatabase')
                 }
             }
             setTimeout(()=>{getItem()}, 3000);

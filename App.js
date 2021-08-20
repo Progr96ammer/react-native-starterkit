@@ -6,8 +6,8 @@ import home from './views/auth/home';
 import login from './views/auth/login';
 import signup from './views/auth/signup';
 import emailVerifyForm from './views/auth/emailVerifyForm';
-import splash from './views/splash';
-import SyncDatabase from './views/middleware/syncdatabase';
+import Splash from './views/splash';
+import SyncDatabase from './views/middleware/SyncDatabase';
 import forgetPassword from './views/auth/forgetPassword';
 import PasswordResetVerify from './views/auth/PasswordResetVerify';
 import resetPassword from './views/auth/resetPassword';
@@ -21,8 +21,8 @@ class app extends Component {
     render() {
         return (
             <NavigationContainer>
-                <Stack.Navigator initialRouteName={'splash'}>
-                    <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="splash" component={splash} />
+                <Stack.Navigator initialRouteName={'Splash'}>
+                    <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="Splash" component={Splash} />
                     <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="SyncDatabase" component={SyncDatabase} />
                     <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="home" component={home} />
                     <Stack.Screen name="emailVerifyForm" component={emailVerifyForm} />

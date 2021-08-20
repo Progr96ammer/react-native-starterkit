@@ -1,9 +1,24 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import {Alert, Button, StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import {
+    NativeBaseProvider,
+    Text,
+    Box,
+    View,
+    Button,
+    Heading,
+    VStack,
+    FormControl,
+    Input,
+    Link,
+    Icon,
+    IconButton,
+    HStack,
+    Divider, Center
+} from 'native-base';
 
 const Drawer = createDrawerNavigator();
 
@@ -31,31 +46,77 @@ export default function home({ navigation }) {
                 }
                 if (json.url == '../'){
                     AsyncStorage.removeItem('token');
-                    navigation.navigate('login');
+                    navigation.navigate('login')
                 }
 
             })
     }
-    const HomeConent = ()=>{
+    const HomeContent = ()=>{
         return(
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <StatusBar
-                    hidden={true} />
-                <Button
-                    onPress={logout}
-                    title="logout"
-                />
-                <Button
-                    onPress={() => {navigation.navigate('deleteAccount')}}
-                    title="deleteAccount"
-                />
-            </View>
+            <NativeBaseProvider>
+                <VStack
+                    flex={1}
+                >
+                </VStack>
+                <VStack>
+                    <Button
+                        style={[styles.drawerButton,]}
+                        variant="ghost"
+                        endIcon={<Icon as={Ionicons} name="log-out-outline" size={7} />}
+                        _text={{
+                            fontSize:'md'
+                        }}
+                    >
+                        Logout
+                    </Button>
+                </VStack>
+            </NativeBaseProvider>
         )
     }
     const HomeDrawer = ()=>{
         return(
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            </View>
+            <NativeBaseProvider>
+                <VStack
+                    style={{paddingTop:20}}
+                    flex={1}
+                >
+                    <Button
+                        onPress={() => navigation.navigate('profile')}
+                        style={[styles.drawerButton,]}
+                        variant="ghost"
+                        endIcon={<Icon as={Ionicons} name="person-circle-outline" size={7} />}
+                        _text={{
+                            fontSize:'md'
+                        }}
+                    >
+                        Profile
+                    </Button>
+                    <Button
+                        onPress={() => navigation.navigate('profile')}
+                        style={[styles.drawerButton,]}
+                        variant="ghost"
+                        endIcon={<Icon as={Ionicons} name="cog-outline" size={7} />}
+                        _text={{
+                            fontSize:'md'
+                        }}
+                    >
+                        Setting
+                    </Button>
+                </VStack>
+                <VStack>
+                    <Button
+                        onPress={logout}
+                        style={[styles.drawerButton,]}
+                        variant="ghost"
+                        endIcon={<Icon as={Ionicons} name="log-out-outline" size={7} />}
+                        _text={{
+                            fontSize:'md'
+                        }}
+                    >
+                        Logout
+                    </Button>
+                </VStack>
+            </NativeBaseProvider>
         )
     }
 
@@ -65,7 +126,14 @@ export default function home({ navigation }) {
             initialRouteName={'homeContent'}
             drawerContent={(props) => <HomeDrawer {...props} />}
         >
-            <Drawer.Screen name="Home" component={HomeConent} />
+            <Drawer.Screen name="Home" component={HomeContent} />
         </Drawer.Navigator>
     );
 }
+
+const styles = StyleSheet.create({
+    drawerButton:{
+        borderBottomWidth:1,
+        borderBottomColor:'#d4d4d4'
+    }
+});

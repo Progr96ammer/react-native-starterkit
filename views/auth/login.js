@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {Alert} from "react-native";
-import {useState} from 'react';
+import {Alert, BackHandler} from "react-native";
+import {useState,useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import {
@@ -18,9 +18,13 @@ import {
     HStack,
     Divider, Center
 } from 'native-base';
-import {verticalAlign} from "styled-system";
 
 export default function App({ navigation }) {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+            BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [password, setPassword] = useState('');
