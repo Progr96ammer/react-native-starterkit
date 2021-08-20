@@ -115,85 +115,70 @@ export default function App({ navigation }) {
     return (
         <NativeBaseProvider>
             <Box
-                style={{paddingTop:40}}
                 flex={1}
                 p={2}
                 w="90%"
                 mx='auto'
             >
-                <ScrollView
-                    showsVerticalScrollIndicator ={false}
-                >
-                    <Heading size="lg" color='primary.500'>
-                        Welcome
-                    </Heading>
-                    <Heading color="muted.400" size="xs">
-                        Sign up to continue!
-                    </Heading>
+                <Heading size="lg" color='primary.500'>
+                    Welcome
+                </Heading>
+                <Heading color="muted.400" size="xs">
+                    Sign up to continue!
+                </Heading>
 
-                    <VStack space={2} mt={5}>
-                        <FormControl>
-                            <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                                Name
-                            </FormControl.Label>
-                            <Input onChangeText={(text)=>setName(text)} />
-                            <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                                {nameError}
-                            </FormControl.Label>
-                        </FormControl>
-                        <FormControl>
-                            <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                                Username
-                            </FormControl.Label>
-                            <Input onChangeText={(text)=>setUsername(text)}/>
-                            <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                                {usernameError}
-                            </FormControl.Label>
-                        </FormControl>
-                        <FormControl>
-                            <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                                Email
-                            </FormControl.Label>
-                            <Input onChangeText={(text)=>setEmail(text)}/>
-                            <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                                {emailError}
-                            </FormControl.Label>
-                        </FormControl>
-                        <FormControl>
-                            <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                                Password
-                            </FormControl.Label>
-                            <Input onChangeText={(text)=>setPassword(text)} type="password" />
-                            <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                                {passwordError}
-                            </FormControl.Label>
-                        </FormControl>
-                        <FormControl>
-                            <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
-                                Confirm Password
-                            </FormControl.Label>
-                            <Input onChangeText={(text)=>setConfirmPassword(text)} type="password" />
-                            <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
-                                {confirmPasswordError}
-                            </FormControl.Label>
-                        </FormControl>
-                        <VStack  space={2}  mt={5}>
-                            <Button onPress={signup} colorScheme="cyan" _text={{color: 'white' }}>
-                                SignUp
-                            </Button>
-                        </VStack>
-                        <Center>
-                            <HStack>
-                                <Heading color="muted.400" size="xs"> You've an account.? </Heading>
-                            </HStack>
-                        </Center>
-                        <VStack justifyContent="center">
-                            <Button onPress={() => navigation.navigate('login')} colorScheme="cyan" _text={{color: 'white' }}>
-                                Login
-                            </Button>
-                        </VStack>
+                <VStack space={2} mt={5}>
+                    <FormControl>
+                        <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                            Name
+                        </FormControl.Label>
+                        <Input onChangeText={(text)=>setName(text)} />
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {nameError}
+                        </FormControl.Label>
+                    </FormControl>
+                    <FormControl>
+                        <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                            Username
+                        </FormControl.Label>
+                        <Input onChangeText={(text)=>setUsername(text)}/>
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {usernameError}
+                        </FormControl.Label>
+                    </FormControl>
+                    <FormControl>
+                        <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                            Email
+                        </FormControl.Label>
+                        <Input onChangeText={(text)=>setEmail(text)}/>
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {emailError}
+                        </FormControl.Label>
+                    </FormControl>
+                    <FormControl>
+                        <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                            Password
+                        </FormControl.Label>
+                        <Input onChangeText={(text)=>setPassword(text)} type="password" />
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {passwordError}
+                        </FormControl.Label>
+                    </FormControl>
+                    <FormControl>
+                        <FormControl.Label  _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
+                            Confirm Password
+                        </FormControl.Label>
+                        <Input onChangeText={(text)=>setConfirmPassword(text)} type="password" />
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600}}>
+                            {confirmPasswordError}
+                        </FormControl.Label>
+                    </FormControl>
+                    <VStack  space={2}  mt={5}>
+                        <Button onPress={signup} colorScheme="cyan" _text={{color: 'white' }}>
+                            SignUp
+                        </Button>
                     </VStack>
-                </ScrollView>
+                </VStack>
             </Box>
         </NativeBaseProvider>
     );

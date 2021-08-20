@@ -14,6 +14,7 @@ import resetPassword from './views/auth/resetPassword';
 import profile from './views/auth/profile';
 import updatePassword from './views/auth/updatePassword';
 import deleteAccount from './views/auth/deleteAccount';
+import setting from './views/auth/setting';
 
 const Stack = createStackNavigator();
 
@@ -26,8 +27,9 @@ class app extends Component {
                     <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="SyncDatabase" component={SyncDatabase} />
                     <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="home" component={home} />
                     <Stack.Screen name="emailVerifyForm" component={emailVerifyForm} />
+                    <Stack.Screen name="setting" component={setting} />
                     <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="login" component={login} />
-                    <Stack.Screen options={{headerShown: false,gestureEnabled: false}} name="signup" component={signup} />
+                    <Stack.Screen name="signup" component={signup} />
                     <Stack.Screen name="forgetPassword" component={forgetPassword} />
                     <Stack.Screen name="PasswordResetVerify" component={PasswordResetVerify} />
                     <Stack.Screen name="resetPassword" component={resetPassword} />

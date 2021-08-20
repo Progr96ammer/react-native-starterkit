@@ -31,7 +31,6 @@ class profile extends Component {
         const token = await AsyncStorage.getItem('token');
         try {
             var decoded = jwt(JSON.parse(token).reftoken);
-            console.log(this.state.name)
             this.setState({name:decoded.user.name})
             this.setState({username:decoded.user.username})
             console.log(this.state.name)
