@@ -91,7 +91,11 @@ export default function App({ navigation }) {
                 }
                 if(json.url == '/home'){
                     storeData(json.token);
-                    navigation.navigate('SyncDatabase');
+                    navigation.navigate('home');
+                }
+                if (json.url == '/user/emailVerifyForm') {
+                    storeData(json.token);
+                    navigation.navigate('emailVerifyForm');
                 }
             })
     }
