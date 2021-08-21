@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Alert, StyleSheet,Linking} from 'react-native';
+import {Alert, StyleSheet, Linking, BackHandler} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
@@ -26,6 +26,11 @@ import Svg, {Defs, Image, Use} from "react-native-svg";
 const Drawer = createDrawerNavigator();
 
 export default function home({ navigation }) {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+            BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
     const  logout = async () => {
         const token = await AsyncStorage.getItem('token');
         return fetch('http://progr96ammer-noder.herokuapp.com/user/logout',{

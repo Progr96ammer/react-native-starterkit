@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {Alert, Linking, StyleSheet} from "react-native";
-import {useState} from 'react';
+import {Alert, BackHandler, Linking, StyleSheet} from "react-native";
+import {useState,useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -25,6 +25,11 @@ import Svg, {Defs, Image, Use} from "react-native-svg";
 
 const Drawer = createDrawerNavigator();
 export default function App({ navigation }) {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+            BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
     const [fresh, setFresh] = useState('');
     const [verificaionCode, setVerificaionCode] = useState('');
     const [verificaionCodeError, setVerificaionCodeError] = useState('');

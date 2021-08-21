@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "noder",
+    "name": "Noder",
     "slug": "AllInOne",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.progr96ammer.AllInOne"
     },
     "android": {
       "adaptiveIcon": {
