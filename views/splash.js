@@ -57,17 +57,17 @@ export default function SyncDatabase({ navigation }) {
                         }
 
                         if (json.url == 'user/emailVerifyForm') {
-                            SplashScreen.hideAsync();
                             navigation.navigate('emailVerifyForm');
+                            SplashScreen.hideAsync();
                         }
                         if (json.url == '/home') {
-                            SplashScreen.hideAsync();
                             navigation.navigate('home');
+                            SplashScreen.hideAsync();
                         }
                         if (json.url == '/sessionNotFound') {
-                            SplashScreen.hideAsync();
                             AsyncStorage.removeItem('token');
                             navigation.navigate('login');
+                            SplashScreen.hideAsync();
                         }
                     })
             } catch (e) {
@@ -81,7 +81,7 @@ export default function SyncDatabase({ navigation }) {
             }
         }
         else{
-            SplashScreen.hideAsync();
+            await SplashScreen.hideAsync();
             navigation.navigate('login');
         }
     }
@@ -92,6 +92,33 @@ export default function SyncDatabase({ navigation }) {
     });
     return (
         <NativeBaseProvider>
+            {/*<Center flex={1}>*/}
+            {/*    <Animated.View*/}
+            {/*        style={{transform: [{rotate: rotation}]}}*/}
+            {/*    >*/}
+            {/*        <Svg*/}
+            {/*            xmlns="http://www.w3.org/2000/svg"*/}
+            {/*            style={{*/}
+            {/*                margin: "auto",*/}
+            {/*                background: "#f1f2f3",*/}
+            {/*            }}*/}
+            {/*            width={50}*/}
+            {/*            height={50}*/}
+            {/*            viewBox="0 0 100 100"*/}
+            {/*        >*/}
+            {/*            <Circle*/}
+            {/*                cx={50}*/}
+            {/*                cy={50}*/}
+            {/*                fill="none"*/}
+            {/*                stroke="#93dbe9"*/}
+            {/*                strokeWidth={10}*/}
+            {/*                r={35}*/}
+            {/*                strokeDasharray="164.93361431346415 56.97787143782138"*/}
+            {/*            >*/}
+            {/*            </Circle>*/}
+            {/*        </Svg>*/}
+            {/*    </Animated.View>*/}
+            {/*</Center>*/}
         </NativeBaseProvider>
     );
 }
