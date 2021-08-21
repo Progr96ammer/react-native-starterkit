@@ -57,13 +57,15 @@ export default function SyncDatabase({ navigation }) {
                         }
 
                         if (json.url == 'user/emailVerifyForm') {
+                            SplashScreen.hideAsync();
                             navigation.navigate('emailVerifyForm');
                         }
                         if (json.url == '/home') {
-                            navigation.navigate('home');
                             SplashScreen.hideAsync();
+                            navigation.navigate('home');
                         }
                         if (json.url == '/sessionNotFound') {
+                            SplashScreen.hideAsync();
                             AsyncStorage.removeItem('token');
                             navigation.navigate('login');
                         }
@@ -79,8 +81,8 @@ export default function SyncDatabase({ navigation }) {
             }
         }
         else{
+            SplashScreen.hideAsync();
             navigation.navigate('login');
-            await SplashScreen.hideAsync();
         }
     }
     getItem()
