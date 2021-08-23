@@ -104,7 +104,6 @@ export default function home({ navigation }) {
         return(
             <NativeBaseProvider>
                 <VStack
-                    style={{paddingTop:20}}
                     flex={1}
                 >
                     <Button

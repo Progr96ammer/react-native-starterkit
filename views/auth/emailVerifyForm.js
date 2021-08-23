@@ -157,7 +157,6 @@ export default function App({ navigation }) {
         return(
             <NativeBaseProvider>
                 <VStack
-                    style={{paddingTop:20}}
                     flex={1}
                 >
                     <Button
@@ -217,7 +216,7 @@ export default function App({ navigation }) {
                             <Button onPress={verify} colorScheme="cyan" _text={{color: 'white' }}>
                                 Verify
                             </Button>
-                            <HStack justifyContent="center">
+                            <HStack p={2} justifyContent="center">
                                 <Heading color="muted.400" size="xs">
                                     Before proceeding, please check your email for a verification code.
                                 </Heading>
