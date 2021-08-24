@@ -23,6 +23,7 @@ import {
 import {bottom} from "styled-system";
 import Svg, {Defs, Image, Use} from "react-native-svg";
 import Loading from "../loading";
+import {DrawerActions} from "@react-navigation/native";
 
 const Drawer = createDrawerNavigator();
 
@@ -34,6 +35,7 @@ export default function home({ navigation }) {
             BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
     const  logout = async () => {
+        navigation.dispatch(DrawerActions.toggleDrawer())
         setLoading(true)
         const token = await AsyncStorage.getItem('token');
         return fetch('http://progr96ammer-noder.herokuapp.com/user/logout',{
