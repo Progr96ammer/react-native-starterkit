@@ -22,6 +22,7 @@ import {
 } from 'native-base';
 import {verticalAlign} from "styled-system";
 import Svg, {Defs, Image, Use} from "react-native-svg";
+import Loading from "../loading";
 
 const Drawer = createDrawerNavigator();
 export default function App({ navigation }) {
@@ -33,9 +34,11 @@ export default function App({ navigation }) {
     const [fresh, setFresh] = useState('');
     const [verificaionCode, setVerificaionCode] = useState('');
     const [verificaionCodeError, setVerificaionCodeError] = useState('');
+    const [loading, setLoading] = useState(false);
     const sendFresh = async () => {
         const token = await AsyncStorage.getItem('token');
         try {
+            setLoading(true)
             return fetch('http://progr96ammer-noder.herokuapp.com/user/sendEmailVerify',{
                 method: 'POST',
                 headers: {
@@ -46,6 +49,7 @@ export default function App({ navigation }) {
             })
                 .then((response) => response.json())
                 .then((json) => {
+                    setLoading(false)
                     if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
                         Alert.alert(
                             "Connection Error",
@@ -70,6 +74,7 @@ export default function App({ navigation }) {
         }
     }
     const  logout = async () => {
+        setLoading(true)
         const token = await AsyncStorage.getItem('token');
         return fetch('http://progr96ammer-noder.herokuapp.com/user/logout',{
             method: 'POST',
@@ -81,6 +86,7 @@ export default function App({ navigation }) {
         })
             .then((response) => response.json())
             .then((json) => {
+                setLoading(false)
                 if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
                     Alert.alert(
                         "Connection Error",
@@ -98,6 +104,7 @@ export default function App({ navigation }) {
             })
     }
     const verify = async () => {
+        setLoading(true)
         const token = await AsyncStorage.getItem('token');
         try {
             return fetch('http://progr96ammer-noder.herokuapp.com/user/verify/email',{
@@ -113,6 +120,7 @@ export default function App({ navigation }) {
             })
                 .then((response) => response.json())
                 .then((json) => {
+                    setLoading(false)
                     if (json.errors){
                         json.errors.forEach(value=> {
                             if (value.param == 'attempts') {
@@ -190,6 +198,7 @@ export default function App({ navigation }) {
 
     const EmailVerifyContent = ()=>{
         return(
+            loading?(<Loading/>):(
             <NativeBaseProvider>
                 <Center flex={1}>
                     <Box>
@@ -234,7 +243,7 @@ export default function App({ navigation }) {
                         </VStack>
                     </Box>
                 </Center>
-            </NativeBaseProvider>
+            </NativeBaseProvider>)
         )
     }
     return (

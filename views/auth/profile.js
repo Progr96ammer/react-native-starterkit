@@ -17,6 +17,7 @@ import {
     Divider
 } from 'native-base';
 import React, { Component } from 'react';
+import Loading from "../loading";
 
 class profile extends Component {
     state = {
@@ -26,6 +27,7 @@ class profile extends Component {
         usernameError: '',
         password: '',
         passwordError: '',
+        loading:false,
     };
     async componentDidMount() {
         const token = await AsyncStorage.getItem('token');
@@ -58,6 +60,7 @@ class profile extends Component {
         }
     }
     update = async () => {
+        this.setState({loading:true})
         const token = await AsyncStorage.getItem('token');
         return fetch('http://progr96ammer-noder.herokuapp.com/user/profile',{
             method: 'POST',
@@ -74,6 +77,7 @@ class profile extends Component {
         })
             .then((response) => response.json())
             .then((json) => {
+                this.setState({loading:false})
                 this.setState({nameError:''})
                 this.setState({usernameError:''})
                 this.setState({passwordError:''})
@@ -117,6 +121,7 @@ class profile extends Component {
     }
     render() {
         return (
+            this.state.loading?(<Loading/>):(
             <NativeBaseProvider>
                 <Box
                     style={{paddingTop:40}}
@@ -167,7 +172,7 @@ class profile extends Component {
                         </VStack>
                     </VStack>
                 </Box>
-            </NativeBaseProvider>
+            </NativeBaseProvider>)
         );
     }
 }

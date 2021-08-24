@@ -19,6 +19,7 @@ import {
     Divider, Center
 } from 'native-base';
 import {verticalAlign} from "styled-system";
+import Loading from "../loading";
 
 export default function App({ navigation :{goBack}}) {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -27,8 +28,10 @@ export default function App({ navigation :{goBack}}) {
     const [newPasswordError, setNewPasswordError] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [confirmNewPasswordError, setConfirmNewPasswordError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const update = async () => {
+        setLoading(true)
         const token = await AsyncStorage.getItem('token');
         return fetch('http://progr96ammer-noder.herokuapp.com/user/updatePassword',{
             method: 'POST',
@@ -46,6 +49,7 @@ export default function App({ navigation :{goBack}}) {
         })
             .then((response) => response.json())
             .then((json) => {
+                setLoading(false)
                 setCurrentPasswordError('')
                 setNewPasswordError('')
                 setConfirmNewPasswordError('')
@@ -87,6 +91,7 @@ export default function App({ navigation :{goBack}}) {
             })
     }
     return (
+        loading?(<Loading/>):(
         <NativeBaseProvider>
             <Box
                 style={{paddingTop:40}}
@@ -138,6 +143,6 @@ export default function App({ navigation :{goBack}}) {
                     </VStack>
                 </VStack>
             </Box>
-        </NativeBaseProvider>
+        </NativeBaseProvider>)
     );
 }

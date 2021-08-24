@@ -18,18 +18,19 @@ import {
     HStack,
     Divider, Center
 } from 'native-base';
+import Loading from "../loading";
 
 export default function App({ navigation }) {
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => true)
         return () =>
             BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
-    const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-
     const storeData = async (value) => {
         try {
             await AsyncStorage.setItem('token', JSON.stringify(value))
@@ -45,6 +46,7 @@ export default function App({ navigation }) {
     }
 
     const login = () => {
+        setLoading(true);
         return fetch('http://progr96ammer-noder.herokuapp.com/user/login',{
             method: 'POST',
             headers: {
@@ -58,6 +60,7 @@ export default function App({ navigation }) {
         })
             .then((response) => response.json())
             .then((json) => {
+                setLoading(false);
                 setEmailError('')
                 setPasswordError('')
                 if (json.errors){
@@ -100,6 +103,7 @@ export default function App({ navigation }) {
             })
     }
     return (
+        loading?(<Loading/>):(
         <NativeBaseProvider>
             <Box
                 style={{paddingTop:40}}
@@ -159,6 +163,6 @@ export default function App({ navigation }) {
                     </VStack>
                 </VStack>
             </Box>
-        </NativeBaseProvider>
+        </NativeBaseProvider>)
     );
 }

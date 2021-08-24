@@ -22,16 +22,19 @@ import {
 } from 'native-base';
 import {bottom} from "styled-system";
 import Svg, {Defs, Image, Use} from "react-native-svg";
+import Loading from "../loading";
 
 const Drawer = createDrawerNavigator();
 
 export default function home({ navigation }) {
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => true)
         return () =>
             BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
     const  logout = async () => {
+        setLoading(true)
         const token = await AsyncStorage.getItem('token');
         return fetch('http://progr96ammer-noder.herokuapp.com/user/logout',{
             method: 'POST',
@@ -43,6 +46,7 @@ export default function home({ navigation }) {
         })
             .then((response) => response.json())
             .then((json) => {
+                setLoading(false)
                 if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
                     Alert.alert(
                         "Connection Error",
@@ -61,6 +65,7 @@ export default function home({ navigation }) {
     }
     const HomeContent = ()=>{
         return(
+            loading?(<Loading/>):(
             <NativeBaseProvider>
                 <Box flex={1}>
                 <Center mt={'20%'} >
@@ -97,7 +102,7 @@ export default function home({ navigation }) {
                         View in gethub
                     </Button>
                 </Box>
-            </NativeBaseProvider>
+            </NativeBaseProvider>)
         )
     }
     const HomeDrawer = ()=>{

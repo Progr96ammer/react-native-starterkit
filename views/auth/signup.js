@@ -19,6 +19,7 @@ import {
     HStack,
     Divider, Center
 } from 'native-base';
+import Loading from "../loading";
 
 export default function App({ navigation }) {
     const [name, setName] = useState('');
@@ -31,6 +32,7 @@ export default function App({ navigation }) {
     const [passwordError, setPasswordError] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const storeData = async (value) => {
         try {
@@ -47,6 +49,7 @@ export default function App({ navigation }) {
     }
 
     const signup = () => {
+        setLoading(true);
         return fetch('http://progr96ammer-noder.herokuapp.com/user/register',{
             method: 'POST',
             headers: {
@@ -63,6 +66,7 @@ export default function App({ navigation }) {
         })
             .then((response) => response.json())
             .then((json) => {
+                setLoading(false);
                 setNameError('')
                 setUsernameError('')
                 setEmailError('')
@@ -113,6 +117,7 @@ export default function App({ navigation }) {
             })
     }
     return (
+        loading?(<Loading/>):(
         <NativeBaseProvider>
             <Box
                 flex={1}
@@ -184,6 +189,6 @@ export default function App({ navigation }) {
                     </VStack>
                 </ScrollView>
             </Box>
-        </NativeBaseProvider>
+        </NativeBaseProvider>)
     );
 }

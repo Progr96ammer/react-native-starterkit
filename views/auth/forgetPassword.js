@@ -18,11 +18,14 @@ import {
     HStack,
     Divider, Center
 } from 'native-base';
+import Loading from "../loading";
 
 export default function App({ navigation }) {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
+    const [loading, setLoading] = useState(false);
     const send = () => {
+        setLoading(true)
         return fetch('http://progr96ammer-noder.herokuapp.com/user/sendResetPassword',{
             method: 'POST',
             headers: {
@@ -35,6 +38,7 @@ export default function App({ navigation }) {
         })
             .then((response) => response.json())
             .then((json) => {
+                setLoading(false)
                 setEmailError('')
                 if (json.errors){
                     json.errors.forEach(value=> {
@@ -70,6 +74,7 @@ export default function App({ navigation }) {
             })
     }
     return (
+        loading?(<Loading/>):(
         <NativeBaseProvider>
             <Box
                 style={{paddingTop:40}}
@@ -102,6 +107,6 @@ export default function App({ navigation }) {
                     </VStack>
                 </VStack>
             </Box>
-        </NativeBaseProvider>
+        </NativeBaseProvider>)
     );
 }

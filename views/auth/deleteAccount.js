@@ -18,12 +18,15 @@ import {
     Divider, Center
 } from 'native-base';
 import {verticalAlign} from "styled-system";
+import Loading from "../loading";
 
 export default function App({ navigation }) {
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const Delete = async () => {
+        setLoading(true);
         const token = await AsyncStorage.getItem('token');
         return fetch('http://progr96ammer-noder.herokuapp.com/user/deleteUser',{
             method: 'POST',
@@ -39,6 +42,7 @@ export default function App({ navigation }) {
         })
             .then((response) => response.json())
             .then((json) => {
+                setLoading(false);
                 setPasswordError('')
                 if (json.errors){
                     json.errors.forEach(value=> {
@@ -73,6 +77,7 @@ export default function App({ navigation }) {
             })
     }
     return (
+        loading?(<Loading/>):(
         <NativeBaseProvider>
             <Box
                 style={{paddingTop:40}}
@@ -106,6 +111,6 @@ export default function App({ navigation }) {
                     </VStack>
                 </VStack>
             </Box>
-        </NativeBaseProvider>
+        </NativeBaseProvider>)
     );
 }

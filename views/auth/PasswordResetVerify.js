@@ -20,15 +20,18 @@ import {
     Divider
 } from 'native-base';
 import {verticalAlign} from "styled-system";
+import Loading from "../loading";
 
 export default function App({route, navigation }) {
     const [fresh, setFresh] = useState('');
     const [verificaionCode, setVerificaionCode] = useState('');
     const [verificaionCodeError, setVerificaionCodeError] = useState('');
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState(route.params.credential);
     const sendFresh = async () => {
         const token = await AsyncStorage.getItem('token');
         try {
+            setLoading(true)
             return fetch('http://progr96ammer-noder.herokuapp.com/user/sendResetPassword',{
                 method: 'POST',
                 headers: {
@@ -42,6 +45,7 @@ export default function App({route, navigation }) {
             })
                 .then((response) => response.json())
                 .then((json) => {
+                    setLoading(false)
                     if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
                         Alert.alert(
                             "Connection Error",
@@ -67,6 +71,7 @@ export default function App({route, navigation }) {
     }
     const verify = async () => {
         try {
+            setLoading(true)
             return fetch('http://progr96ammer-noder.herokuapp.com/user/confirmResetPassword',{
                 method: 'POST',
                 headers: {
@@ -80,6 +85,7 @@ export default function App({route, navigation }) {
             })
                 .then((response) => response.json())
                 .then((json) => {
+                    setLoading(false)
                     if (json.errors){
                         json.errors.forEach(value=> {
                             if (value.param == 'attempts') {
@@ -122,6 +128,7 @@ export default function App({route, navigation }) {
         }
     }
     return (
+        loading?(<Loading/>):(
         <NativeBaseProvider>
             <Center flex={1}>
                 <Box>
@@ -166,6 +173,6 @@ export default function App({route, navigation }) {
                     </VStack>
                 </Box>
             </Center>
-        </NativeBaseProvider>
+        </NativeBaseProvider>)
     );
 }

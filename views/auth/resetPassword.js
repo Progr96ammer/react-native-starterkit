@@ -19,6 +19,7 @@ import {
     Divider, Center
 } from 'native-base';
 import {verticalAlign} from "styled-system";
+import Loading from "../loading";
 
 export default function App({ route,navigation }) {
     const [email, setEmail] = useState(route.params.credential);
@@ -26,6 +27,7 @@ export default function App({ route,navigation }) {
     const [newPasswordError, setNewPasswordError] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [confirmNewPasswordError, setConfirmNewPasswordError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const storeData = async (value) => {
         try {
@@ -42,6 +44,7 @@ export default function App({ route,navigation }) {
     }
 
     const reset = () => {
+        setLoading(true)
         return fetch('http://progr96ammer-noder.herokuapp.com/user/resetPassword',{
             method: 'POST',
             headers: {
@@ -56,6 +59,7 @@ export default function App({ route,navigation }) {
         })
             .then((response) => response.json())
             .then((json) => {
+                setLoading(false)
                 setNewPasswordError('')
                 setConfirmNewPasswordError('')
                 if (json.errors){
@@ -94,6 +98,7 @@ export default function App({ route,navigation }) {
             })
     }
     return (
+        loading?(<Loading/>):(
         <NativeBaseProvider>
             <Box
                 style={{paddingTop:40}}
@@ -136,6 +141,6 @@ export default function App({ route,navigation }) {
                     </VStack>
                 </VStack>
             </Box>
-        </NativeBaseProvider>
+        </NativeBaseProvider>)
     );
 }
