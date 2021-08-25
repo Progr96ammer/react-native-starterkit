@@ -69,10 +69,6 @@ export default function SyncDatabase({ navigation }) {
         }
     }
     getItem()
-    const rotation = rotationRef.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg'],
-    });
     return (
         <Loading/>
     );
