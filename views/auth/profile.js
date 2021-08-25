@@ -17,7 +17,7 @@ import {
     Divider
 } from 'native-base';
 import React, { Component } from 'react';
-import Loading from "../loading";
+import Loading from "../components/loading";
 
 class profile extends Component {
     state = {

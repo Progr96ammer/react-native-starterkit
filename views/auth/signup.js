@@ -19,7 +19,7 @@ import {
     HStack,
     Divider, Center
 } from 'native-base';
-import Loading from "../loading";
+import Loading from "../components/loading";
 
 export default function App({ navigation }) {
     const [name, setName] = useState('');

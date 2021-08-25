@@ -19,7 +19,7 @@ import {
     Divider, Center
 } from 'native-base';
 import {verticalAlign} from "styled-system";
-import Loading from "../loading";
+import Loading from "../components/loading";
 
 export default function App({ route,navigation }) {
     const [email, setEmail] = useState(route.params.credential);

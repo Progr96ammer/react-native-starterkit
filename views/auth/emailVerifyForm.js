@@ -22,7 +22,7 @@ import {
 } from 'native-base';
 import {verticalAlign} from "styled-system";
 import Svg, {Defs, Image, Use} from "react-native-svg";
-import Loading from "../loading";
+import Loading from "../components/loading";
 import {DrawerActions} from "@react-navigation/native";
 
 const Drawer = createDrawerNavigator();

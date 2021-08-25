@@ -20,7 +20,7 @@ import {
     HStack,
     Divider, Center
 } from 'native-base';
-import Loading from "./loading";
+import Loading from "./components/loading";
 
 export default function SyncDatabase({ navigation }) {
     const rotationRef = useRef(new Animated.Value(0)).current;
