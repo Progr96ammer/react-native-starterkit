@@ -4,17 +4,11 @@ import jwt from "jwt-decode";
 import {
     NativeBaseProvider,
     Box,
-    Text,
     Heading,
     VStack,
     FormControl,
     Input,
-    Link,
     Button,
-    Icon,
-    IconButton,
-    HStack,
-    Divider
 } from 'native-base';
 import React, { Component } from 'react';
 import Loading from "../components/loading";

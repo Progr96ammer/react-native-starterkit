@@ -1,22 +1,14 @@
 import * as React from 'react';
 import {Alert} from "react-native";
 import {useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import {
     NativeBaseProvider,
     Box,
-    Text,
     Heading,
     VStack,
     FormControl,
     Input,
-    Link,
     Button,
-    Icon,
-    IconButton,
-    HStack,
-    Divider, Center
 } from 'native-base';
 import Loading from "../components/loading";
 

@@ -5,19 +5,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     NativeBaseProvider,
     Box,
-    Text,
     Heading,
     VStack,
     FormControl,
     Input,
-    Link,
     Button,
-    Icon,
-    IconButton,
-    HStack,
-    Divider, Center
 } from 'native-base';
-import {verticalAlign} from "styled-system";
 import Loading from "../components/loading";
 
 export default function App({ navigation }) {

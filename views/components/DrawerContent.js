@@ -1,24 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {Alert, StyleSheet} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import {
     NativeBaseProvider,
-    Text,
-    Box,
-    View,
-    List,
     Button,
-    Heading,
     VStack,
-    FormControl,
-    Input,
-    Link,
     Icon,
-    IconButton,
-    HStack,
-    Divider, Center
 } from 'native-base';
 import {DrawerActions} from "@react-navigation/native";
 

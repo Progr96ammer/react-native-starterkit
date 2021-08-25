@@ -1,18 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
     NativeBaseProvider,
-    Box,
-    Text,
-    Heading,
     VStack,
-    FormControl,
-    Input,
-    Link,
     Button,
     Icon,
-    IconButton,
-    HStack,
-    Divider, Center
 } from 'native-base';
 import {Ionicons} from "@expo/vector-icons";
 import {StyleSheet} from "react-native";

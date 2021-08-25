@@ -5,21 +5,10 @@ import Svg, {
 } from 'react-native-svg';
 import {
     NativeBaseProvider,
-    Box,
-    Text,
-    Heading,
-    VStack,
-    FormControl,
-    Input,
-    Link,
-    Button,
-    Icon,
-    IconButton,
-    HStack,
-    Divider, Center
+    Center
 } from 'native-base';
 
-export default function Loading({ navigation }) {
+export default function Loading() {
     const rotationRef = useRef(new Animated.Value(0)).current;
     Animated.loop(
         Animated.timing(rotationRef, {

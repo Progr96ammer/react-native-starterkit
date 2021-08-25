@@ -1,25 +1,7 @@
 import {Alert ,Animated ,Easing , View} from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from 'expo-splash-screen';
-import Svg, {
-    Circle,
-} from 'react-native-svg';
-import {
-    NativeBaseProvider,
-    Box,
-    Text,
-    Heading,
-    VStack,
-    FormControl,
-    Input,
-    Link,
-    Button,
-    Icon,
-    IconButton,
-    HStack,
-    Divider, Center
-} from 'native-base';
 import Loading from "./components/loading";
 
 export default function SyncDatabase({ navigation }) {

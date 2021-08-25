@@ -2,24 +2,17 @@ import * as React from 'react';
 import {Alert} from "react-native";
 import {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import {
     NativeBaseProvider,
     Center,
     Box,
-    Text,
     Heading,
     VStack,
     FormControl,
     Input,
-    Link,
     Button,
-    Icon,
-    IconButton,
     HStack,
-    Divider
 } from 'native-base';
-import {verticalAlign} from "styled-system";
 import Loading from "../components/loading";
 
 export default function App({route, navigation }) {
