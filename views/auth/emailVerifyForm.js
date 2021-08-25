@@ -1,29 +1,21 @@
 import * as React from 'react';
-import {Alert, BackHandler, Linking, StyleSheet} from "react-native";
+import {Alert, BackHandler, StyleSheet} from "react-native";
 import {useState,useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import {
     NativeBaseProvider,
     Center,
     Box,
-    Text,
     Heading,
     VStack,
     FormControl,
     Input,
-    Link,
     Button,
-    Icon,
-    IconButton,
     HStack,
-    Divider, List
 } from 'native-base';
-import {verticalAlign} from "styled-system";
-import Svg, {Defs, Image, Use} from "react-native-svg";
 import Loading from "../components/loading";
-import {DrawerActions} from "@react-navigation/native";
+import DrawerContent from "../components/DrawerContent";
 
 const Drawer = createDrawerNavigator();
 export default function App({ navigation }) {
@@ -73,37 +65,6 @@ export default function App({ navigation }) {
                 ]
             )
         }
-    }
-    const  logout = async () => {
-        navigation.dispatch(DrawerActions.toggleDrawer())
-        setLoading(true)
-        const token = await AsyncStorage.getItem('token');
-        return fetch('http://progr96ammer-noder.herokuapp.com/user/logout',{
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'X-Access-Token':token,
-            },
-        })
-            .then((response) => response.json())
-            .then((json) => {
-                setLoading(false)
-                if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
-                    Alert.alert(
-                        "Connection Error",
-                        json,
-                        [
-                            { text: "OK", onPress: () => console.log("OK Pressed") }
-                        ]
-                    )
-                }
-                if (json.url == '../'){
-                    AsyncStorage.removeItem('token');
-                    navigation.navigate('login')
-                }
-
-            })
     }
     const verify = async () => {
         setLoading(true)
@@ -165,36 +126,7 @@ export default function App({ navigation }) {
 
     const EmailVerifyDrawer = ()=>{
         return(
-            <NativeBaseProvider>
-                <VStack
-                    flex={1}
-                >
-                    <Button
-                        onPress={() => navigation.navigate('setting')}
-                        style={[styles.drawerButton,]}
-                        variant="ghost"
-                        endIcon={<Icon as={Ionicons} name="cog-outline" size={7} />}
-                        _text={{
-                            fontSize:'md'
-                        }}
-                    >
-                        Setting
-                    </Button>
-                </VStack>
-                <VStack>
-                    <Button
-                        onPress={logout}
-                        style={[styles.drawerButton,styles.borderTop]}
-                        variant="ghost"
-                        endIcon={<Icon as={Ionicons} name="log-out-outline" size={7} />}
-                        _text={{
-                            fontSize:'md'
-                        }}
-                    >
-                        Logout
-                    </Button>
-                </VStack>
-            </NativeBaseProvider>
+            <DrawerContent stateChanger={setLoading}/>
         )
     }
 
@@ -258,14 +190,3 @@ export default function App({ navigation }) {
         </Drawer.Navigator>
     );
 }
-
-const styles = StyleSheet.create({
-    drawerButton:{
-        borderBottomWidth:1,
-        borderBottomColor:'#d4d4d4'
-    },
-    borderTop:{
-        borderTopWidth:1,
-        borderTopColor:'#d4d4d4'
-    }
-});

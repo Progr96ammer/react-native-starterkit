@@ -1,69 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import {Alert, StyleSheet, Linking, BackHandler} from 'react-native';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Linking, BackHandler} from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import {
     NativeBaseProvider,
     Text,
     Box,
-    View,
     List,
     Button,
-    Heading,
     VStack,
-    FormControl,
-    Input,
-    Link,
     Icon,
-    IconButton,
-    HStack,
-    Divider, Center
+    Center
 } from 'native-base';
-import {bottom} from "styled-system";
 import Svg, {Defs, Image, Use} from "react-native-svg";
 import Loading from "../components/loading";
-import {DrawerActions} from "@react-navigation/native";
+import DrawerContent from "../components/DrawerContent";
 
 const Drawer = createDrawerNavigator();
 
-export default function home({ navigation }) {
+export default function home() {
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => true)
         return () =>
             BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
-    const  logout = async () => {
-        navigation.dispatch(DrawerActions.toggleDrawer())
-        setLoading(true)
-        const token = await AsyncStorage.getItem('token');
-        return fetch('http://progr96ammer-noder.herokuapp.com/user/logout',{
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'X-Access-Token':token,
-            },
-        })
-            .then((response) => response.json())
-            .then((json) => {
-                setLoading(false)
-                if (json == 'Soory We Cann`t Complete Your Procedure Right Now, Please try again later!') {
-                    Alert.alert(
-                        "Connection Error",
-                        json,
-                        [
-                            { text: "OK", onPress: () => console.log("OK Pressed") }
-                        ]
-                    )
-                }
-                if (json.url == '../'){
-                    AsyncStorage.removeItem('token');
-                    navigation.navigate('login')
-                }
-
-            })
+    const HomeDrawer = ()=>{
+        return(
+            <DrawerContent stateChanger={setLoading}/>
+        )
     }
     const HomeContent = ()=>{
         return(
@@ -107,40 +72,6 @@ export default function home({ navigation }) {
             </NativeBaseProvider>)
         )
     }
-    const HomeDrawer = ()=>{
-        return(
-            <NativeBaseProvider>
-                <VStack
-                    flex={1}
-                >
-                    <Button
-                        onPress={() => navigation.navigate('setting')}
-                        style={[styles.drawerButton,]}
-                        variant="ghost"
-                        endIcon={<Icon as={Ionicons} name="cog-outline" size={7} />}
-                        _text={{
-                            fontSize:'md'
-                        }}
-                    >
-                        Setting
-                    </Button>
-                </VStack>
-                <VStack>
-                    <Button
-                        onPress={logout}
-                        style={[styles.drawerButton,styles.borderTop]}
-                        variant="ghost"
-                        endIcon={<Icon as={Ionicons} name="log-out-outline" size={7} />}
-                        _text={{
-                            fontSize:'md'
-                        }}
-                    >
-                        Logout
-                    </Button>
-                </VStack>
-            </NativeBaseProvider>
-        )
-    }
 
     return (
         <Drawer.Navigator
@@ -152,14 +83,3 @@ export default function home({ navigation }) {
         </Drawer.Navigator>
     );
 }
-
-const styles = StyleSheet.create({
-    drawerButton:{
-        borderBottomWidth:1,
-        borderBottomColor:'#d4d4d4'
-    },
-    borderTop:{
-        borderTopWidth:1,
-        borderTopColor:'#d4d4d4'
-    }
-});
