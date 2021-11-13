@@ -9,9 +9,13 @@ import {
     FormControl,
     Input,
     Button,
+    Center,
+    Image,
+    Pressable,
 } from 'native-base';
 import React, { Component } from 'react';
 import Loading from "../components/loading";
+import * as ImagePicker from 'expo-image-picker';
 
 class profile extends Component {
     state = {
@@ -20,8 +24,13 @@ class profile extends Component {
         username: '',
         usernameError: '',
         password: '',
+        image: 'http://progr96ammer-noder.herokuapp.com/images/default_avatar.png',
+        imageInfo: '',
+        imageError: '',
         passwordError: '',
         loading:false,
+        selectedImage:'',
+        setSelectedImage:'',
     };
     async componentDidMount() {
         const token = await AsyncStorage.getItem('token');
@@ -29,7 +38,9 @@ class profile extends Component {
             var decoded = jwt(JSON.parse(token).reftoken);
             this.setState({name:decoded.user.name})
             this.setState({username:decoded.user.username})
-            console.log(this.state.name)
+            if (decoded.user.avatar !=''){
+                this.setState({image:'https://progr96ammer-noder.herokuapp.com'+decoded.user.avatar + '?' + new Date()})
+            }
         } catch(err) {
             Alert.alert(
                 "Server error",
@@ -40,6 +51,27 @@ class profile extends Component {
             )
         }
     }
+    openImagePickerAsync = async () => {
+        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+            alert('Permission to access camera roll is required!');
+            return;
+        }
+
+        let pickerResult = await ImagePicker.launchImageLibraryAsync();
+
+        if (pickerResult.cancelled === true) {
+            return;
+        }
+        let localUri = pickerResult.uri;
+        let filename = localUri.split('/').pop();
+        filename.replace(/\.[^/.]+$/, "")
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+        this.setState({ image:pickerResult.uri })
+        this.setState({ imageInfo: { uri: localUri,name: filename, type } })
+    };
     storeData = async (value) => {
         try {
             await AsyncStorage.setItem('token', JSON.stringify(value))
@@ -55,19 +87,21 @@ class profile extends Component {
     }
     update = async () => {
         this.setState({loading:true})
+        let formData = new FormData();
+        formData.append('name',this.state.name);
+        formData.append('username',this.state.username);
+        formData.append('password',this.state.password);
+        formData.append('avatar',this.state.imageInfo);
+
         const token = await AsyncStorage.getItem('token');
         return fetch('http://progr96ammer-noder.herokuapp.com/user/profile',{
             method: 'POST',
             headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'content-type': 'multipart/form-data',
                 'X-Access-Token':token,
             },
-            body: JSON.stringify({
-                name: this.state.name,
-                username: this.state.username,
-                password: this.state.password,
-            })
+            body:formData,
         })
             .then((response) => response.json())
             .then((json) => {
@@ -75,6 +109,7 @@ class profile extends Component {
                 this.setState({nameError:''})
                 this.setState({usernameError:''})
                 this.setState({passwordError:''})
+                this.setState({imageError:''})
                 if (json.errors){
                     json.errors.forEach(value=> {
                             if (value.param == 'attempts') {
@@ -94,6 +129,9 @@ class profile extends Component {
                             }
                             if (value.param == 'password') {
                                 this.setState({passwordError:value.msg})
+                            }
+                            if (value.param == 'avatar') {
+                                this.setState({imageError:value.msg})
                             }
                         }
                     )
@@ -124,12 +162,25 @@ class profile extends Component {
                     w="90%"
                     mx='auto'
                 >
-                    <Heading size="lg" color='primary.500'>
-                        Welcome
-                    </Heading>
-                    <Heading color="muted.400" size="xs">
-                        Profile
-                    </Heading>
+                    <Center>
+                        <Pressable  style={{borderRadius: 300}} onPress={this.openImagePickerAsync}>
+                            <Image
+                                size={150}
+                                borderRadius={100}
+                                resizeMode="cover"
+                                key={new Date()}
+                                source={{
+                                    uri:this.state.image
+                                }}
+                                alt="Alternate Text"
+                            />
+                        </Pressable>
+                    </Center>
+                    <Center>
+                        <FormControl.Label _text={{color: 'red.700', fontSize: 'sm', fontWeight: 600, pt:2}}>
+                            {this.state.imageError}
+                        </FormControl.Label>
+                    </Center>
 
                     <VStack space={2} mt={5}>
                         <FormControl>
