@@ -24,7 +24,7 @@ class profile extends Component {
         username: '',
         usernameError: '',
         password: '',
-        image: 'http://progr96ammer-noder.herokuapp.com/images/default_avatar.png',
+        image: 'https://progr96ammer-noder.herokuapp.com/images/default_avatar.png'+'?' + new Date(),
         imageInfo: '',
         imageError: '',
         passwordError: '',
@@ -38,7 +38,8 @@ class profile extends Component {
             var decoded = jwt(JSON.parse(token).reftoken);
             this.setState({name:decoded.user.name})
             this.setState({username:decoded.user.username})
-            if (decoded.user.avatar !=''){
+            if (decoded.user.avatar && decoded.user.avatar !=''){
+                console.log(decoded.user.avatar)
                 this.setState({image:'https://progr96ammer-noder.herokuapp.com'+decoded.user.avatar + '?' + new Date()})
             }
         } catch(err) {
@@ -164,7 +165,14 @@ class profile extends Component {
                 >
                     <Center>
                         <Pressable  style={{borderRadius: 300}} onPress={this.openImagePickerAsync}>
+                            <Box
+                                size={150}
+                                borderRadius={100}
+                                style={{backgroundColor: 'gray'}}>
+                                <Loading></Loading>
+                            </Box>
                             <Image
+                                mt={-150}
                                 size={150}
                                 borderRadius={100}
                                 resizeMode="cover"
@@ -182,7 +190,7 @@ class profile extends Component {
                         </FormControl.Label>
                     </Center>
 
-                    <VStack space={2} mt={5}>
+                    <VStack space={2}>
                         <FormControl>
                             <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>
                                 Name

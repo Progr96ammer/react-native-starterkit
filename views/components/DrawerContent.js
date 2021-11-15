@@ -64,7 +64,7 @@ export default function DrawerContent({stateChanger}) {
             <VStack>
                 <Button
                     onPress={logout}
-                    style={[styles.drawerButton,styles.borderTop]}
+                    style={[styles.borderTop]}
                     variant="ghost"
                     endIcon={<Icon as={Ionicons} name="log-out-outline" size={7} />}
                     _text={{
