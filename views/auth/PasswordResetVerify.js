@@ -48,7 +48,7 @@ export default function App({route, navigation }) {
                             ]
                         )
                     }
-                    if(json.url == 'confirmResetPasswordForm?credential='+email+''){
+                    if(json.url == 'confirmResetPasswordForm?credential='+email.toLowerCase()+''){
                         setFresh('fresh')
                     }
                 })
@@ -104,7 +104,7 @@ export default function App({route, navigation }) {
                             ]
                         )
                     }
-                    if(json.url == 'resetpassword/email?credential='+email+''){
+                    if(json.url == 'resetpassword/email?credential='+email.toLowerCase()+''){
                         navigation.navigate('resetPassword',{
                             credential:email,
                         });

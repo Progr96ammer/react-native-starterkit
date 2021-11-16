@@ -58,7 +58,7 @@ export default function App({ navigation }) {
                         ]
                     )
                 }
-                if(json.url == 'confirmResetPasswordForm?credential='+email+''){
+                if(json.url == 'confirmResetPasswordForm?credential='+email.toLowerCase()+''){
                     navigation.navigate('PasswordResetVerify',{
                         credential:email,
                     });
