@@ -24,7 +24,7 @@ class profile extends Component {
         username: '',
         usernameError: '',
         password: '',
-        image: 'https://progr96ammer-noder.herokuapp.com/images/default_avatar.png'+'?' + new Date(),
+        image: 'https://progr96ammer-noder.herokuapp.com/images/avatars/default_avatar.png'+'?' + new Date(),
         imageInfo: '',
         imageError: '',
         passwordError: '',
@@ -39,7 +39,6 @@ class profile extends Component {
             this.setState({name:decoded.user.name})
             this.setState({username:decoded.user.username})
             if (decoded.user.avatar && decoded.user.avatar !=''){
-                console.log(decoded.user.avatar)
                 this.setState({image:'https://progr96ammer-noder.herokuapp.com'+decoded.user.avatar + '?' + new Date()})
             }
         } catch(err) {
@@ -179,6 +178,9 @@ class profile extends Component {
                                 key={new Date()}
                                 source={{
                                     uri:this.state.image
+                                }}
+                                onError={() => {
+                                    this.setState({image:'https://progr96ammer-noder.herokuapp.com/images/avatars/default_avatar.png'+'?' + new Date()})
                                 }}
                                 alt="Alternate Text"
                             />
